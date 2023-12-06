@@ -1,0 +1,61 @@
+.game-hints {
+  cursor: vertical-text;
+
+  margin-bottom: 2rem;
+  max-width: 60vh;
+  height: 6vh;
+
+  font-size: 3vh;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+button {
+  background: transparent;
+  padding: 1rem 2rem;
+  margin: 1rem;
+  font-size: 2rem;
+
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  border-bottom-right-radius: 225px 15px;
+  border-bottom-left-radius: 15px 255px;
+
+  font-family: "Caveat", sans-serif;
+
+  line-height: 4vh;
+
+  cursor: pointer;
+
+  color: #302c2c;
+
+  text-shadow: 0 3px 5px rgba(#000, 0.25);
+  background-image: url(https://web.archive.org/web/20160312084140im_/http://splatoon.nintendo.com/assets/img/nav-bg-fill-blue.png?1443460871);
+  background-repeat: repeat-x;
+  background-position: 0 -100%;
+  transition: 1.5s ease;
+
+  filter: brightness(0.5) saturate(0%);
+
+  &:hover {
+    background-position: 500% 100%;
+  }
+}
+
+button:hover {
+  color: rgb(255, 255, 255);
+  box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+
+  transition: 2s ease;
+}
+
+button:disabled,
+button[disabled] {
+  box-shadow: none;
+  background-image: none;
+  cursor: default;
+}
+
+.replay-button {
+  width: 15rem;
+}
