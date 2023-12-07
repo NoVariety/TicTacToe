@@ -60,7 +60,7 @@ function Game() {
   function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
     if (cellSign === cellTypes.EMPTY) {
       computerTurnFlag = false
-      setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
+      // setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
 
       return playSign
     } else {
@@ -77,11 +77,11 @@ function Game() {
       return prevBoard.map((prevRow, rIndex) => {
         return prevRow.map((prevCell, cIndex) => {
           if (rIndex === rowIndex && cIndex === colIndex) {
-            console.log("curr turn: " + playSign)
-            console.log("rIndex = " + rIndex)
-            console.log("rowIndex = " + rowIndex)
-            console.log("cIndex = " + cIndex)
-            console.log("colIndex = " + colIndex)
+            // console.log("curr turn: " + playSign)
+            // console.log("rIndex = " + rIndex)
+            // console.log("rowIndex = " + rowIndex)
+            // console.log("cIndex = " + cIndex)
+            // console.log("colIndex = " + colIndex)
             return changeSign(prevCell, playSign)
           }
           return prevCell
@@ -99,6 +99,19 @@ function Game() {
 
   React.useEffect(() => computerTurn(), [computerTurnFlag])
 
+  function isBoardFull(): boolean {
+    for (let rowIndex = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
+      for (let colIndex = 0; colIndex < BOARD_LENGTH; colIndex++) {
+        if (board[rowIndex][colIndex] === cellTypes.EMPTY) {
+          console.log("x")
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
   function computerTurn(): void {
     const computerSign: cellTypes =
       playerSign === cellTypes.FIRST_PLAYER
@@ -110,7 +123,7 @@ function Game() {
 
     console.log("+++++++++++++++++++++++++++++++++++++")
     console.log("computer turn is " + computerTurnFlag)
-    console.log("draw counter is " + drawCounter)
+    // console.log("draw counter is " + drawCounter)
 
     // while (computerTurnFlag && drawCounter < MAX_TURNS) {
     // TODO: check board if full as a condition for the while
@@ -130,16 +143,29 @@ function Game() {
   }
 
   function playTurn(rowIndex: number, colIndex: number): void {
-    setHintsText(getRandomHint()) // TODO: change so it makes sense
+    console.log("isboardfull? " + isBoardFull())
 
-    changeCell(rowIndex, colIndex, playerSign)
-    // setComputerTurnFlag(true)
-    computerTurnFlag = true
-    console.log(computerTurnFlag)
-    computerTurn()
-    console.log(computerTurnFlag)
+    if (isBoardFull()) {
+      alert("Board is full!") // TODO: change to html element
+    } else {
+      if (board[rowIndex][colIndex] !== cellTypes.EMPTY) {
+        alert("The cell you clicked is already filled!")
+      } else {
+        setHintsText(getRandomHint()) // TODO: change so it makes sense
 
-    setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
+        changeCell(rowIndex, colIndex, playerSign)
+        // setComputerTurnFlag(true)
+        computerTurnFlag = true
+        console.log(computerTurnFlag)
+        if (!isBoardFull()) {
+          computerTurn()
+        }
+
+        console.log(computerTurnFlag)
+
+        // setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
+      }
+    }
   }
 
   function getRandomCoordinate(): number {
