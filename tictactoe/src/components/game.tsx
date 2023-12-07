@@ -93,7 +93,7 @@ function Game() {
     })
   }
 
-  const [drawCounter, setDrawCounter] = React.useState<number>(0) // ! remove later if not needed
+  // const [drawCounter, setDrawCounter] = React.useState<number>(0) // ! remove later if not needed
   let computerTurnFlag: boolean =
     playerSign === cellTypes.FIRST_PLAYER ? false : true
 
@@ -103,7 +103,6 @@ function Game() {
     for (let rowIndex = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
       for (let colIndex = 0; colIndex < BOARD_LENGTH; colIndex++) {
         if (board[rowIndex][colIndex] === cellTypes.EMPTY) {
-          console.log("x")
           return false
         }
       }
@@ -122,24 +121,30 @@ function Game() {
     let sign: cellTypes = cellTypes.EMPTY
 
     console.log("+++++++++++++++++++++++++++++++++++++")
-    console.log("computer turn is " + computerTurnFlag)
+    console.log("computer turn in turn is " + computerTurnFlag)
     // console.log("draw counter is " + drawCounter)
 
     // while (computerTurnFlag && drawCounter < MAX_TURNS) {
     // TODO: check board if full as a condition for the while
     while (computerTurnFlag) {
       console.log("----------------------------------")
+      console.log("computer turn in turn is " + computerTurnFlag)
+      console.log("----------------------------------")
+
       rowIndex = getRandomCoordinate()
       colIndex = getRandomCoordinate()
+      console.log("in board, sign is " + board[rowIndex][colIndex])
       sign = changeSign(board[rowIndex][colIndex], computerSign)
       console.log("in while, sign is " + sign)
     }
 
-    // console.log("row " + rowIndex)
-    // console.log("col " + colIndex)
-    // console.log("sign  " + sign)
-    // console.log("fs  " + board[rowIndex][colIndex])
-    changeCell(rowIndex, colIndex, sign)
+    console.log("---STATS---")
+    console.log("row " + rowIndex)
+    console.log("col " + colIndex)
+    console.log("sign  " + sign)
+    console.log("fs  " + board[rowIndex][colIndex])
+    console.log(board)
+    changeCell(rowIndex, colIndex, sign) //! problem: board doesnt update fast enough. possible solution: temp board for all the stuff and useeffect to update board
   }
 
   function playTurn(rowIndex: number, colIndex: number): void {
@@ -149,23 +154,27 @@ function Game() {
       alert("Board is full!") // TODO: change to html element
     } else {
       if (board[rowIndex][colIndex] !== cellTypes.EMPTY) {
-        alert("The cell you clicked is already filled!")
+        alert("The cell you clicked is already filled!") // TODO: change to html element
       } else {
-        setHintsText(getRandomHint()) // TODO: change so it makes sense
+        setHintsText(getRandomHint())
 
         changeCell(rowIndex, colIndex, playerSign)
         // setComputerTurnFlag(true)
         computerTurnFlag = true
-        console.log(computerTurnFlag)
+        console.log(board)
+        console.log("computer turn before turn? " + computerTurnFlag)
+
+        console.log("isboardfull (in if)? " + isBoardFull())
         if (!isBoardFull()) {
           computerTurn()
         }
 
-        console.log(computerTurnFlag)
+        console.log("computer turn after turn? " + computerTurnFlag)
 
         // setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
       }
     }
+    console.log("0000000000000000000000000000000000000")
   }
 
   function getRandomCoordinate(): number {
