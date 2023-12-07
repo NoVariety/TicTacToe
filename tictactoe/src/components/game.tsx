@@ -9,7 +9,6 @@ import { cellTypes, hintTextOptions } from "../data"
 
 function Game() {
   const BOARD_LENGTH: number = 3
-  const MAX_TURNS: number = BOARD_LENGTH * BOARD_LENGTH
 
   const [playerSign, setPlayerSign] = React.useState<cellTypes>(
     Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
@@ -57,6 +56,8 @@ function Game() {
     )
   }
 
+  let tempBoard = board
+
   function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
     if (cellSign === cellTypes.EMPTY) {
       computerTurnFlag = false
@@ -68,41 +69,52 @@ function Game() {
     }
   }
 
+  // function changeCell(
+  //   rowIndex: number,
+  //   colIndex: number,
+  //   playSign: cellTypes
+  // ): void {
+  //   setBoard((prevBoard) => {
+  //     return prevBoard.map((row, rIndex) => {
+  //       return row.map((cell, cIndex) => {
+  //         if (rIndex === rowIndex && cIndex === colIndex) {
+  //           // console.log("curr turn: " + playSign)
+  //           // console.log("rIndex = " + rIndex)
+  //           // console.log("rowIndex = " + rowIndex)
+  //           // console.log("cIndex = " + cIndex)
+  //           // console.log("colIndex = " + colIndex)
+  //           return changeSign(cell, playSign)
+  //         }
+  //         return cell
+  //         // return rIndex === rowIndex && cIndex === colIndex
+  //         //   ? changeSign(prevCell, playSign)
+  //         //   : prevCell
+  //       })
+  //     })
+  //   })
+  // }
+
   function changeCell(
     rowIndex: number,
     colIndex: number,
     playSign: cellTypes
   ): void {
-    setBoard((prevBoard) => {
-      return prevBoard.map((prevRow, rIndex) => {
-        return prevRow.map((prevCell, cIndex) => {
-          if (rIndex === rowIndex && cIndex === colIndex) {
-            // console.log("curr turn: " + playSign)
-            // console.log("rIndex = " + rIndex)
-            // console.log("rowIndex = " + rowIndex)
-            // console.log("cIndex = " + cIndex)
-            // console.log("colIndex = " + colIndex)
-            return changeSign(prevCell, playSign)
-          }
-          return prevCell
-          // return rIndex === rowIndex && cIndex === colIndex
-          //   ? changeSign(prevCell, playSign)
-          //   : prevCell
-        })
-      })
-    })
+    tempBoard[rowIndex][colIndex] = playSign
+    setBoard(tempBoard)
   }
+
+  React.useEffect(() => {}, [tempBoard])
 
   // const [drawCounter, setDrawCounter] = React.useState<number>(0) // ! remove later if not needed
   let computerTurnFlag: boolean =
     playerSign === cellTypes.FIRST_PLAYER ? false : true
 
-  React.useEffect(() => computerTurn(), [computerTurnFlag])
+  React.useEffect(() => computerTurn(), [computerTurnFlag]) // TODO: fix bug in which computer doesnt start the game when it gets X
 
   function isBoardFull(): boolean {
     for (let rowIndex = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
       for (let colIndex = 0; colIndex < BOARD_LENGTH; colIndex++) {
-        if (board[rowIndex][colIndex] === cellTypes.EMPTY) {
+        if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
           return false
         }
       }
@@ -120,40 +132,22 @@ function Game() {
     let colIndex: number = getRandomCoordinate()
     let sign: cellTypes = cellTypes.EMPTY
 
-    console.log("+++++++++++++++++++++++++++++++++++++")
-    console.log("computer turn in turn is " + computerTurnFlag)
-    // console.log("draw counter is " + drawCounter)
-
     // while (computerTurnFlag && drawCounter < MAX_TURNS) {
     // TODO: check board if full as a condition for the while
     while (computerTurnFlag) {
-      console.log("----------------------------------")
-      console.log("computer turn in turn is " + computerTurnFlag)
-      console.log("----------------------------------")
-
       rowIndex = getRandomCoordinate()
       colIndex = getRandomCoordinate()
-      console.log("in board, sign is " + board[rowIndex][colIndex])
-      sign = changeSign(board[rowIndex][colIndex], computerSign)
-      console.log("in while, sign is " + sign)
+      sign = changeSign(tempBoard[rowIndex][colIndex], computerSign)
     }
 
-    console.log("---STATS---")
-    console.log("row " + rowIndex)
-    console.log("col " + colIndex)
-    console.log("sign  " + sign)
-    console.log("fs  " + board[rowIndex][colIndex])
-    console.log(board)
     changeCell(rowIndex, colIndex, sign) //! problem: board doesnt update fast enough. possible solution: temp board for all the stuff and useeffect to update board
   }
 
   function playTurn(rowIndex: number, colIndex: number): void {
-    console.log("isboardfull? " + isBoardFull())
-
     if (isBoardFull()) {
       alert("Board is full!") // TODO: change to html element
     } else {
-      if (board[rowIndex][colIndex] !== cellTypes.EMPTY) {
+      if (tempBoard[rowIndex][colIndex] !== cellTypes.EMPTY) {
         alert("The cell you clicked is already filled!") // TODO: change to html element
       } else {
         setHintsText(getRandomHint())
@@ -161,10 +155,7 @@ function Game() {
         changeCell(rowIndex, colIndex, playerSign)
         // setComputerTurnFlag(true)
         computerTurnFlag = true
-        console.log(board)
-        console.log("computer turn before turn? " + computerTurnFlag)
 
-        console.log("isboardfull (in if)? " + isBoardFull())
         if (!isBoardFull()) {
           computerTurn()
         }
@@ -174,7 +165,6 @@ function Game() {
         // setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
       }
     }
-    console.log("0000000000000000000000000000000000000")
   }
 
   function getRandomCoordinate(): number {
