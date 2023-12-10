@@ -56,7 +56,32 @@ function Game() {
     )
   }
 
-  let tempBoard = board
+  // let computerTurnFlag: boolean =
+  //   playerSign === cellTypes.FIRST_PLAYER ? false : true
+  // console.log("f " + computerTurnFlag)
+
+  let computerTurnFlag: boolean =
+    playerSign === cellTypes.FIRST_PLAYER ? false : true
+
+  let tempBoard: cellTypes[][] = board.map((arr) => {
+    return arr.slice()
+  })
+
+  const [ignored, forceUpdate] = React.useReducer((x) => x + 1, 0)
+
+  React.useEffect(() => {
+    console.log(computerTurnFlag)
+    if (computerTurnFlag) {
+      computerTurnFlag = false
+
+      console.log("aa")
+
+      tempBoard[getRandomCoordinate()][getRandomCoordinate()] =
+        cellTypes.FIRST_PLAYER
+      setBoard(tempBoard)
+    }
+    forceUpdate()
+  }, [])
 
   function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
     if (cellSign === cellTypes.EMPTY) {
@@ -101,15 +126,10 @@ function Game() {
   ): void {
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
+    mapBoard()
   }
 
-  React.useEffect(() => {}, [tempBoard])
-
   // const [drawCounter, setDrawCounter] = React.useState<number>(0) // ! remove later if not needed
-  let computerTurnFlag: boolean =
-    playerSign === cellTypes.FIRST_PLAYER ? false : true
-
-  React.useEffect(() => computerTurn(), [computerTurnFlag]) // TODO: fix bug in which computer doesnt start the game when it gets X
 
   function isBoardFull(): boolean {
     for (let rowIndex = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
@@ -159,8 +179,6 @@ function Game() {
         if (!isBoardFull()) {
           computerTurn()
         }
-
-        console.log("computer turn after turn? " + computerTurnFlag)
 
         // setDrawCounter((prevDrawCounter) => prevDrawCounter + 1)
       }
