@@ -7,6 +7,12 @@ import Cell from "./cell"
 
 import { cellTypes, hintTextOptions } from "../data"
 
+enum gameStateMessages {
+  WIN_MESSAGE = "YOU WIN!",
+  DRAW_MESSAGE = "IT'S A DRAW!",
+  LOSS_MESSAGE = "YOU LOSE!",
+}
+
 function Game() {
   const BOARD_LENGTH: number = 3
 
@@ -27,12 +33,7 @@ function Game() {
       .map((row) => new Array(BOARD_LENGTH).fill(cellTypes.EMPTY))
   }
 
-  const [board, setBoard] = React.useState<cellTypes[][]>(
-    // [[cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
-    // [cellTypes.EMPTY, cellTypes.FIRST_PLAYER, cellTypes.EMPTY],
-    // [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],]
-    initializeBoard()
-  )
+  const [board, setBoard] = React.useState<cellTypes[][]>(initializeBoard())
 
   function mapBoard(): React.ReactElement {
     return (
@@ -63,10 +64,9 @@ function Game() {
     return arr.slice()
   })
 
-  const [ignored, forceUpdate] = React.useReducer((x) => x + 1, 0)
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0)
 
   React.useEffect(() => {
-    console.log(computerTurnFlag)
     if (computerTurnFlag) {
       computerTurnFlag = false
 
@@ -98,8 +98,8 @@ function Game() {
   }
 
   function isBoardFull(): boolean {
-    for (let rowIndex = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
-      for (let colIndex = 0; colIndex < BOARD_LENGTH; colIndex++) {
+    for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
+      for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
         if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
           return false
         }
@@ -118,7 +118,6 @@ function Game() {
     let colIndex: number = getRandomCoordinate()
     let sign: cellTypes = cellTypes.EMPTY
 
-    // TODO: check board if full as a condition for the while
     while (computerTurnFlag) {
       rowIndex = getRandomCoordinate()
       colIndex = getRandomCoordinate()
@@ -128,12 +127,18 @@ function Game() {
     changeCell(rowIndex, colIndex, sign)
   }
 
+  function setWinnerMessage(winnerSign: cellTypes): void {
+    setHintsText(
+      winnerSign === playerSign
+        ? gameStateMessages.WIN_MESSAGE
+        : gameStateMessages.LOSS_MESSAGE
+    )
+  }
+
   function playTurn(rowIndex: number, colIndex: number): void {
-    if (isBoardFull()) {
-      alert("Board is full!") // TODO: change to html element
-    } else {
+    if (!isBoardFull() && !isThereAWinner()) {
       if (tempBoard[rowIndex][colIndex] !== cellTypes.EMPTY) {
-        alert("The cell you clicked is already filled!") // TODO: change to html element
+        setHintsText("⚠ THIS CELL IS FULL, TRY ANOTHER ONE ⚠︎")
       } else {
         setHintsText(getRandomHint())
 
@@ -141,15 +146,125 @@ function Game() {
 
         computerTurnFlag = true
 
-        if (!isBoardFull()) {
+        //TODO: also check if game not won
+        if (!isBoardFull() && !isThereAWinner()) {
           computerTurn()
         }
       }
     }
+    // } else {
+    //   checkWinner()
+    // }
   }
+
+  function checkRowsCols(): boolean {
+    let countSameRowSign: number = 0
+    let countSameColSign: number = 0
+
+    for (
+      let initialIndex: number = 0;
+      initialIndex < BOARD_LENGTH;
+      initialIndex++
+    ) {
+      let runIndex: number = 0
+
+      const rowSign: cellTypes = tempBoard[initialIndex][runIndex]
+      const colSign: cellTypes = tempBoard[runIndex][initialIndex]
+
+      for (; runIndex < BOARD_LENGTH; runIndex++) {
+        if (
+          tempBoard[initialIndex][runIndex] === rowSign &&
+          rowSign !== cellTypes.EMPTY
+        ) {
+          countSameRowSign++
+        }
+        if (
+          tempBoard[runIndex][initialIndex] === colSign &&
+          colSign !== cellTypes.EMPTY
+        ) {
+          countSameColSign++
+        }
+      }
+
+      if (countSameRowSign === BOARD_LENGTH) {
+        setWinnerMessage(rowSign)
+        return true
+      } else if (countSameColSign === BOARD_LENGTH) {
+        setWinnerMessage(colSign)
+        return true
+      }
+
+      countSameRowSign = 0
+      countSameColSign = 0
+    }
+
+    return false
+  }
+
+  function checkSlashes(): boolean {
+    let countSlashSign: number = 0
+    let countReverseSlashSign: number = 0
+
+    const slashSign: cellTypes = board[0][BOARD_LENGTH - 1]
+    const reverseSlashSign: cellTypes = board[BOARD_LENGTH - 1][0]
+
+    let reverseIndex: number = BOARD_LENGTH
+
+    for (
+      let rowColIndex: number = 0;
+      rowColIndex < BOARD_LENGTH;
+      rowColIndex++
+    ) {
+      if (
+        board[rowColIndex][rowColIndex] === slashSign &&
+        slashSign !== cellTypes.EMPTY
+      ) {
+        countSlashSign++
+      }
+      if (
+        board[rowColIndex][reverseIndex] === reverseSlashSign &&
+        reverseSlashSign !== cellTypes.EMPTY
+      ) {
+        countReverseSlashSign++
+      }
+      reverseIndex--
+    }
+
+    if (countSlashSign === BOARD_LENGTH) {
+      setWinnerMessage(slashSign)
+      return true
+    } else if (countReverseSlashSign === BOARD_LENGTH) {
+      setWinnerMessage(reverseSlashSign)
+      return true
+    }
+
+    return false
+  }
+
+  function isThereAWinner(): boolean {
+    let isGameWon: boolean = checkRowsCols() || checkSlashes()
+    if (isBoardFull() && !isGameWon) {
+      setHintsText(gameStateMessages.DRAW_MESSAGE)
+    }
+
+    return isGameWon
+  }
+
+  React.useEffect(() => {
+    isThereAWinner()
+  }, [board])
 
   function getRandomCoordinate(): number {
     return Math.floor(Math.random() * (BOARD_LENGTH - 0))
+  }
+
+  // TODO:
+  // * fix winner in cross
+  // ? make winning cooler
+  // ? disable new game button unless game can't progress
+
+  function newGame(): void {
+    setBoard(initializeBoard())
   }
 
   return (
@@ -162,7 +277,9 @@ function Game() {
         {mapBoard()}
 
         <Grid container justifyContent="center">
-          <button className="replay-button">NEW GAME</button>
+          <button className="replay-button" onClick={newGame}>
+            NEW GAME
+          </button>
         </Grid>
       </main>
     </div>

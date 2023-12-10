@@ -49,12 +49,14 @@ button:hover {
   transition: 2s ease;
 }
 
-button:disabled,
+/* button:disabled,
 button[disabled] {
+  color: rgb(207, 207, 207);
+
   box-shadow: none;
   background-image: none;
   cursor: default;
-}
+} */
 
 .replay-button {
   width: 15rem;
