@@ -205,8 +205,10 @@ function Game() {
     let countSlashSign: number = 0
     let countReverseSlashSign: number = 0
 
-    const slashSign: cellTypes = board[0][BOARD_LENGTH - 1]
-    const reverseSlashSign: cellTypes = board[BOARD_LENGTH - 1][0]
+    const slashSign: cellTypes = tempBoard[0][0]
+    const reverseSlashSign: cellTypes = tempBoard[BOARD_LENGTH - 1][0]
+    console.log("slash sign: " + slashSign)
+    console.log("reverse slash sign: " + reverseSlashSign)
 
     let reverseIndex: number = BOARD_LENGTH
 
@@ -216,13 +218,13 @@ function Game() {
       rowColIndex++
     ) {
       if (
-        board[rowColIndex][rowColIndex] === slashSign &&
+        tempBoard[rowColIndex][rowColIndex] === slashSign &&
         slashSign !== cellTypes.EMPTY
       ) {
         countSlashSign++
       }
       if (
-        board[rowColIndex][reverseIndex] === reverseSlashSign &&
+        tempBoard[rowColIndex][reverseIndex] === reverseSlashSign &&
         reverseSlashSign !== cellTypes.EMPTY
       ) {
         countReverseSlashSign++
@@ -265,6 +267,7 @@ function Game() {
 
   function newGame(): void {
     setBoard(initializeBoard())
+    setHintsText(getRandomHint())
   }
 
   return (
