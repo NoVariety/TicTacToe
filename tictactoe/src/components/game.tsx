@@ -1,11 +1,15 @@
-import React from "react"
+import { useState, ReactElement, useEffect, useReducer } from "react"
+
 import "./game.css"
+
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 
 import Cell from "./cell"
 
-import { cellTypes, hintTextOptions } from "../data"
+import { cellTypes, hintTextOptions } from "../data.consts"
+
+//TODO: move all possible css to sx for style tags from MUI
 
 enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
@@ -13,10 +17,13 @@ enum gameStateMessages {
   LOSS_MESSAGE = "YOU LOSE!",
 }
 
+//! move all non dependent functions to a util func and pass params
+//! each component should have a dedicated folder with all of its files
+
 function Game() {
   const BOARD_LENGTH: number = 3
 
-  const [playerSign, setPlayerSign] = React.useState<cellTypes>(
+  const [playerSign, setPlayerSign] = useState<cellTypes>(
     Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
   )
 
@@ -25,66 +32,66 @@ function Game() {
     return hintTextOptions[index]
   }
 
-  const [hintsText, setHintsText] = React.useState<string>(getRandomHint())
+  const [hintsText, setHintsText] = useState<string>(getRandomHint())
 
   function initializeBoard(): cellTypes[][] {
     return Array(BOARD_LENGTH)
       .fill(cellTypes.EMPTY)
-      .map((row) => new Array(BOARD_LENGTH).fill(cellTypes.EMPTY))
+      .map(() => new Array(BOARD_LENGTH).fill(cellTypes.EMPTY)) //! לוותר כל הMAP ,לאתחל בשורה 1
   }
 
-  const [board, setBoard] = React.useState<cellTypes[][]>(initializeBoard())
+  const [board, setBoard] = useState<cellTypes[][]>(initializeBoard())
 
-  function mapBoard(): React.ReactElement {
+  //! להפריד את MAPBOARD לקומפוננטה אחרת
+  //! לבדוק אם אפשר להעביר את הJUSTIFY CONTENT ETC.. לSTYLE
+  //! type sx props
+  function mapBoard(): ReactElement {
     return (
-      <div>
-        <Grid container item justifyContent="center" alignItems="center">
-          {board.map((row, rowIndex) => {
-            return (
-              <Box gridRow="span 3">
-                {Array.from(row).map((_, colIndex) => (
-                  <Cell
-                    sign={row[colIndex]}
-                    index={colIndex}
-                    playTurn={() => playTurn(rowIndex, colIndex)}
-                  />
-                ))}
-              </Box>
-            )
-          })}
-        </Grid>
-      </div>
+      <Grid container item justifyContent="center" alignItems="center">
+        {board.map((row, rowIndex) => (
+          <Box gridRow="span 3">
+            {row.map((cell, colIndex) => (
+              <Cell
+                sign={row[colIndex]}
+                index={colIndex}
+                playTurn={() => playTurn(rowIndex, colIndex)}
+              />
+            ))}
+          </Box>
+        ))}
+      </Grid>
     )
   }
 
-  let computerTurnFlag: boolean =
-    playerSign === cellTypes.FIRST_PLAYER ? false : true
+  let isComputerTurn: boolean = playerSign !== cellTypes.FIRST_PLAYER
 
-  let tempBoard: cellTypes[][] = board.map((arr) => {
-    return arr.slice()
-  })
+  let tempBoard: cellTypes[][] = board.map((arr) => arr.slice())
 
-  const [, forceUpdate] = React.useReducer((x) => x + 1, 0)
+  const [, forceUpdate] = useReducer((x) => x + 1, 0)
 
-  React.useEffect(() => {
-    if (computerTurnFlag) {
-      computerTurnFlag = false
+  function doFirstComputerPlay(): void {
+    if (isComputerTurn) {
+      isComputerTurn = false
 
       tempBoard[getRandomCoordinate()][getRandomCoordinate()] =
         cellTypes.FIRST_PLAYER
       setBoard(tempBoard)
     }
-    forceUpdate()
+    // forceUpdate()
+  }
+
+  //! look into force update
+  useEffect(() => {
+    doFirstComputerPlay()
   }, [])
 
   function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
     if (cellSign === cellTypes.EMPTY) {
-      computerTurnFlag = false
+      isComputerTurn = false
 
       return playSign
-    } else {
-      return cellSign
     }
+    return cellSign
   }
 
   function changeCell(
@@ -94,9 +101,10 @@ function Game() {
   ): void {
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
-    mapBoard()
+    // mapBoard()
   }
 
+  //! improve complexity
   function isBoardFull(): boolean {
     for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
       for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
@@ -109,16 +117,18 @@ function Game() {
     return true
   }
 
+  //! useEffect instead of isComputerTurn
   function computerTurn(): void {
     const computerSign: cellTypes =
       playerSign === cellTypes.FIRST_PLAYER
         ? cellTypes.SECOND_PLAYER
         : cellTypes.FIRST_PLAYER
-    let rowIndex: number = getRandomCoordinate()
+    let rowIndex: number = getRandomCoordinate() //! remove randoms
     let colIndex: number = getRandomCoordinate()
     let sign: cellTypes = cellTypes.EMPTY
 
-    while (computerTurnFlag) {
+    //! make more effcient
+    while (isComputerTurn) {
       rowIndex = getRandomCoordinate()
       colIndex = getRandomCoordinate()
       sign = changeSign(tempBoard[rowIndex][colIndex], computerSign)
@@ -144,7 +154,7 @@ function Game() {
 
         changeCell(rowIndex, colIndex, playerSign)
 
-        computerTurnFlag = true
+        isComputerTurn = true //! try making it a state
 
         if (!isBoardFull() && !isThereAWinner()) {
           computerTurn()
@@ -162,7 +172,7 @@ function Game() {
       initialIndex < BOARD_LENGTH;
       initialIndex++
     ) {
-      let runIndex: number = 0
+      let runIndex: number = 0 //! look into putting it back into the for
 
       const rowSign: cellTypes = tempBoard[initialIndex][runIndex]
       const colSign: cellTypes = tempBoard[runIndex][initialIndex]
@@ -170,7 +180,7 @@ function Game() {
       for (; runIndex < BOARD_LENGTH; runIndex++) {
         if (
           tempBoard[initialIndex][runIndex] === rowSign &&
-          rowSign !== cellTypes.EMPTY
+          rowSign !== cellTypes.EMPTY //! if empty checking it is abundant
         ) {
           countSameRowSign++
         }
@@ -185,7 +195,8 @@ function Game() {
       if (countSameRowSign === BOARD_LENGTH) {
         setWinnerMessage(rowSign)
         return true
-      } else if (countSameColSign === BOARD_LENGTH) {
+      }
+      if (countSameColSign === BOARD_LENGTH) {
         setWinnerMessage(colSign)
         return true
       }
@@ -213,7 +224,7 @@ function Game() {
     ) {
       if (
         tempBoard[rowColIndex][rowColIndex] === slashSign &&
-        slashSign !== cellTypes.EMPTY
+        slashSign !== cellTypes.EMPTY //! if empty checking it is abundant
       ) {
         countSlashSign++
       }
@@ -229,7 +240,8 @@ function Game() {
     if (countSlashSign === BOARD_LENGTH) {
       setWinnerMessage(slashSign)
       return true
-    } else if (countReverseSlashSign === BOARD_LENGTH) {
+    }
+    if (countReverseSlashSign === BOARD_LENGTH) {
       setWinnerMessage(reverseSlashSign)
       return true
     }
@@ -238,29 +250,36 @@ function Game() {
   }
 
   function isThereAWinner(): boolean {
-    let isGameWon: boolean = checkRowsCols() || checkSlashes()
-    if (isBoardFull() && !isGameWon) {
+    const isGameWon: boolean = checkRowsCols() || checkSlashes()
+    if (!isGameWon && isBoardFull()) {
       setHintsText(gameStateMessages.DRAW_MESSAGE)
     }
 
     return isGameWon
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
+    //! check if the minimum possible moves for a win were made
     isThereAWinner()
   }, [board])
 
   function getRandomCoordinate(): number {
-    return Math.floor(Math.random() * (BOARD_LENGTH - 0))
+    return Math.floor(Math.random() * BOARD_LENGTH)
   }
 
   // TODO:
   // ? make winning cooler
   // ? disable new game button unless game can't progress
 
-  function newGame(): void {
+  //! fix bug in which after a new game was started it doesnt play comp's turn in case player is o
+  function startNewGame(): void {
     setBoard(initializeBoard())
     setHintsText(getRandomHint())
+    setPlayerSign(
+      Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
+    )
+    isComputerTurn = playerSign !== cellTypes.FIRST_PLAYER
+    // doFirstComputerPlay()
   }
 
   return (
@@ -273,7 +292,7 @@ function Game() {
         {mapBoard()}
 
         <Grid container justifyContent="center">
-          <button className="replay-button" onClick={newGame}>
+          <button className="replay-button" onClick={startNewGame}>
             NEW GAME
           </button>
         </Grid>
