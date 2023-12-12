@@ -35,9 +35,9 @@ function Game() {
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
 
   function initializeBoard(): cellTypes[][] {
-    return Array(BOARD_LENGTH)
-      .fill(cellTypes.EMPTY)
-      .map(() => new Array(BOARD_LENGTH).fill(cellTypes.EMPTY)) //! לוותר כל הMAP ,לאתחל בשורה 1
+    return Array(BOARD_LENGTH).fill(
+      new Array(BOARD_LENGTH).fill(cellTypes.EMPTY)
+    )
   }
 
   const [board, setBoard] = useState<cellTypes[][]>(initializeBoard())
@@ -67,23 +67,21 @@ function Game() {
 
   let tempBoard: cellTypes[][] = board.map((arr) => arr.slice())
 
-  const [, forceUpdate] = useReducer((x) => x + 1, 0)
+  const [newGameToggle, setNewGameToggle] = useState<boolean>(false)
 
-  function doFirstComputerPlay(): void {
-    if (isComputerTurn) {
-      isComputerTurn = false
-
-      tempBoard[getRandomCoordinate()][getRandomCoordinate()] =
-        cellTypes.FIRST_PLAYER
-      setBoard(tempBoard)
-    }
-    // forceUpdate()
-  }
-
-  //! look into force update
   useEffect(() => {
+    function doFirstComputerPlay(): void {
+      if (isComputerTurn) {
+        isComputerTurn = false
+
+        tempBoard[getRandomCoordinate()][getRandomCoordinate()] =
+          cellTypes.FIRST_PLAYER
+        setBoard(tempBoard)
+      }
+    }
+
     doFirstComputerPlay()
-  }, [])
+  }, [newGameToggle])
 
   function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
     if (cellSign === cellTypes.EMPTY) {
@@ -101,20 +99,20 @@ function Game() {
   ): void {
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
-    // mapBoard()
   }
 
   //! improve complexity
   function isBoardFull(): boolean {
-    for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
-      for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
-        if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
-          return false
-        }
-      }
-    }
+    // for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
+    //   for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
+    //     if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
+    //       return false
+    //     }
+    //   }
+    // }
 
-    return true
+    // return true
+    return board.every((row) => row.every((col) => col !== cellTypes.EMPTY))
   }
 
   //! useEffect instead of isComputerTurn
@@ -164,6 +162,8 @@ function Game() {
   }
 
   function checkRowsCols(): boolean {
+    const FIRST_CELL_INDEX: number = 0
+
     let countSameRowSign: number = 0
     let countSameColSign: number = 0
 
@@ -172,31 +172,23 @@ function Game() {
       initialIndex < BOARD_LENGTH;
       initialIndex++
     ) {
-      let runIndex: number = 0 //! look into putting it back into the for
+      const rowSign: cellTypes = tempBoard[initialIndex][FIRST_CELL_INDEX]
+      const colSign: cellTypes = tempBoard[FIRST_CELL_INDEX][initialIndex]
 
-      const rowSign: cellTypes = tempBoard[initialIndex][runIndex]
-      const colSign: cellTypes = tempBoard[runIndex][initialIndex]
-
-      for (; runIndex < BOARD_LENGTH; runIndex++) {
-        if (
-          tempBoard[initialIndex][runIndex] === rowSign &&
-          rowSign !== cellTypes.EMPTY //! if empty checking it is abundant
-        ) {
+      for (let runIndex: number = 0; runIndex < BOARD_LENGTH; runIndex++) {
+        if (tempBoard[initialIndex][runIndex] === rowSign) {
           countSameRowSign++
         }
-        if (
-          tempBoard[runIndex][initialIndex] === colSign &&
-          colSign !== cellTypes.EMPTY
-        ) {
+        if (tempBoard[runIndex][initialIndex] === colSign) {
           countSameColSign++
         }
       }
 
-      if (countSameRowSign === BOARD_LENGTH) {
+      if (countSameRowSign === BOARD_LENGTH && rowSign !== cellTypes.EMPTY) {
         setWinnerMessage(rowSign)
         return true
       }
-      if (countSameColSign === BOARD_LENGTH) {
+      if (countSameColSign === BOARD_LENGTH && colSign !== cellTypes.EMPTY) {
         setWinnerMessage(colSign)
         return true
       }
@@ -222,26 +214,23 @@ function Game() {
       rowColIndex < BOARD_LENGTH;
       rowColIndex++
     ) {
-      if (
-        tempBoard[rowColIndex][rowColIndex] === slashSign &&
-        slashSign !== cellTypes.EMPTY //! if empty checking it is abundant
-      ) {
+      if (tempBoard[rowColIndex][rowColIndex] === slashSign) {
         countSlashSign++
       }
-      if (
-        tempBoard[rowColIndex][reverseIndex] === reverseSlashSign &&
-        reverseSlashSign !== cellTypes.EMPTY
-      ) {
+      if (tempBoard[rowColIndex][reverseIndex] === reverseSlashSign) {
         countReverseSlashSign++
       }
       reverseIndex--
     }
 
-    if (countSlashSign === BOARD_LENGTH) {
+    if (countSlashSign === BOARD_LENGTH && slashSign !== cellTypes.EMPTY) {
       setWinnerMessage(slashSign)
       return true
     }
-    if (countReverseSlashSign === BOARD_LENGTH) {
+    if (
+      countReverseSlashSign === BOARD_LENGTH &&
+      reverseSlashSign !== cellTypes.EMPTY
+    ) {
       setWinnerMessage(reverseSlashSign)
       return true
     }
@@ -271,15 +260,18 @@ function Game() {
   // ? make winning cooler
   // ? disable new game button unless game can't progress
 
-  //! fix bug in which after a new game was started it doesnt play comp's turn in case player is o
   function startNewGame(): void {
-    setBoard(initializeBoard())
     setHintsText(getRandomHint())
-    setPlayerSign(
+
+    setBoard(initializeBoard())
+    tempBoard = board.map((arr) => arr.slice())
+
+    let tempPlayerSign =
       Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
-    )
-    isComputerTurn = playerSign !== cellTypes.FIRST_PLAYER
-    // doFirstComputerPlay()
+    isComputerTurn = tempPlayerSign !== cellTypes.FIRST_PLAYER
+
+    setPlayerSign(tempPlayerSign)
+    setNewGameToggle((prev) => !prev)
   }
 
   return (

@@ -12,7 +12,6 @@ type Props = {
 }
 
 function Cell(props: Props) {
-  //! check if i can switch func to type Function
   return (
     <Grid item xs={0} sm={4} md={1} key={props.index}>
       <div className="board-cell" onClick={props.playTurn}>
