@@ -146,15 +146,11 @@ function Game() {
 
         computerTurnFlag = true
 
-        //TODO: also check if game not won
         if (!isBoardFull() && !isThereAWinner()) {
           computerTurn()
         }
       }
     }
-    // } else {
-    //   checkWinner()
-    // }
   }
 
   function checkRowsCols(): boolean {
@@ -207,10 +203,8 @@ function Game() {
 
     const slashSign: cellTypes = tempBoard[0][0]
     const reverseSlashSign: cellTypes = tempBoard[BOARD_LENGTH - 1][0]
-    console.log("slash sign: " + slashSign)
-    console.log("reverse slash sign: " + reverseSlashSign)
 
-    let reverseIndex: number = BOARD_LENGTH
+    let reverseIndex: number = BOARD_LENGTH - 1
 
     for (
       let rowColIndex: number = 0;
@@ -261,7 +255,6 @@ function Game() {
   }
 
   // TODO:
-  // * fix winner in cross
   // ? make winning cooler
   // ? disable new game button unless game can't progress
 
