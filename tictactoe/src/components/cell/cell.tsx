@@ -1,8 +1,8 @@
-import React from "react"
 import "./cell.css"
+
 import Grid from "@mui/material/Grid"
 
-import { cellTypes } from "../data.consts"
+import { cellTypes } from "../../data.consts"
 //! take props out individually => decided it is better not to as it diffrentiates props from normal params
 
 type Props = {

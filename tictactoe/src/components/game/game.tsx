@@ -1,13 +1,22 @@
-import { useState, ReactElement, useEffect, useReducer } from "react"
+import { useState, useEffect } from "react"
 
 import "./game.css"
+import { gameHintsSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
-import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Container from "@mui/material/Container"
+import Board from "../board/board"
+import Typography from "@mui/material/Typography"
 
-import Cell from "./cell"
-
-import { cellTypes, hintTextOptions } from "../data.consts"
+import { cellTypes, BOARD_LENGTH } from "../../data.consts"
+import {
+  getRandomPlayerSign,
+  getRandomCoordinate,
+  getRandomHint,
+  createEmptyBoard,
+  isBoardFull,
+} from "../../utils/gameUtils"
 
 //TODO: move all possible css to sx for style tags from MUI
 
@@ -17,51 +26,15 @@ enum gameStateMessages {
   LOSS_MESSAGE = "YOU LOSE!",
 }
 
-//! move all non dependent functions to a util func and pass params
-//! each component should have a dedicated folder with all of its files
+//! fix bug in which drawing the game as X causes an infinite look before last turn
 
 function Game() {
-  const BOARD_LENGTH: number = 3
-
-  const [playerSign, setPlayerSign] = useState<cellTypes>(
-    Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
-  )
-
-  function getRandomHint(): string {
-    const index = Math.floor(Math.random() * hintTextOptions.length)
-    return hintTextOptions[index]
-  }
-
+  const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
+  const [board, setBoard] = useState<cellTypes[][]>(createEmptyBoard())
 
-  function initializeBoard(): cellTypes[][] {
-    return Array(BOARD_LENGTH).fill(
-      new Array(BOARD_LENGTH).fill(cellTypes.EMPTY)
-    )
-  }
-
-  const [board, setBoard] = useState<cellTypes[][]>(initializeBoard())
-
-  //! להפריד את MAPBOARD לקומפוננטה אחרת
   //! לבדוק אם אפשר להעביר את הJUSTIFY CONTENT ETC.. לSTYLE
   //! type sx props
-  function mapBoard(): ReactElement {
-    return (
-      <Grid container item justifyContent="center" alignItems="center">
-        {board.map((row, rowIndex) => (
-          <Box gridRow="span 3">
-            {row.map((cell, colIndex) => (
-              <Cell
-                sign={row[colIndex]}
-                index={colIndex}
-                playTurn={() => playTurn(rowIndex, colIndex)}
-              />
-            ))}
-          </Box>
-        ))}
-      </Grid>
-    )
-  }
 
   let isComputerTurn: boolean = playerSign !== cellTypes.FIRST_PLAYER
 
@@ -101,20 +74,7 @@ function Game() {
     setBoard(tempBoard)
   }
 
-  //! improve complexity
-  function isBoardFull(): boolean {
-    // for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
-    //   for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
-    //     if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
-    //       return false
-    //     }
-    //   }
-    // }
-
-    // return true
-    return board.every((row) => row.every((col) => col !== cellTypes.EMPTY))
-  }
-
+  //****************************************************************************/ rennovate as a bulk => from here
   //! useEffect instead of isComputerTurn
   function computerTurn(): void {
     const computerSign: cellTypes =
@@ -126,6 +86,13 @@ function Game() {
     let sign: cellTypes = cellTypes.EMPTY
 
     //! make more effcient
+    //* IDEA:
+    //? make an indexes array the size of the board
+    //? for example: [{x: 0,y: 0}, {x: 1,y: 0}, {x: 2,y: 0}... {x: 2,y: 2}...].
+    //? each time get random number between 0 and indexes array -1 to get a random indexes object
+    //? after taking an indexes object out, remove it from the array
+    //? on player turn, search the object matching the indexes of the play and remove it
+    //? this way while is unnecessary as is isComputerTurn and it will work much faster on bigger boards
     while (isComputerTurn) {
       rowIndex = getRandomCoordinate()
       colIndex = getRandomCoordinate()
@@ -134,6 +101,7 @@ function Game() {
 
     changeCell(rowIndex, colIndex, sign)
   }
+  //****************************************************************************/                 => to here
 
   function setWinnerMessage(winnerSign: cellTypes): void {
     setHintsText(
@@ -144,7 +112,7 @@ function Game() {
   }
 
   function playTurn(rowIndex: number, colIndex: number): void {
-    if (!isBoardFull() && !isThereAWinner()) {
+    if (!isBoardFull(board) && !isThereAWinner()) {
       if (tempBoard[rowIndex][colIndex] !== cellTypes.EMPTY) {
         setHintsText("⚠ THIS CELL IS FULL, TRY ANOTHER ONE ⚠︎")
       } else {
@@ -154,7 +122,7 @@ function Game() {
 
         isComputerTurn = true //! try making it a state
 
-        if (!isBoardFull() && !isThereAWinner()) {
+        if (!isBoardFull(board) && !isThereAWinner()) {
           computerTurn()
         }
       }
@@ -240,7 +208,7 @@ function Game() {
 
   function isThereAWinner(): boolean {
     const isGameWon: boolean = checkRowsCols() || checkSlashes()
-    if (!isGameWon && isBoardFull()) {
+    if (!isGameWon && isBoardFull(board)) {
       setHintsText(gameStateMessages.DRAW_MESSAGE)
     }
 
@@ -249,12 +217,10 @@ function Game() {
 
   useEffect(() => {
     //! check if the minimum possible moves for a win were made
+    //* how? when i do the array of free cells,
+    //* check (board lengh * board length) - array length to see num of moves made
     isThereAWinner()
   }, [board])
-
-  function getRandomCoordinate(): number {
-    return Math.floor(Math.random() * BOARD_LENGTH)
-  }
 
   // TODO:
   // ? make winning cooler
@@ -263,11 +229,10 @@ function Game() {
   function startNewGame(): void {
     setHintsText(getRandomHint())
 
-    setBoard(initializeBoard())
+    setBoard(createEmptyBoard())
     tempBoard = board.map((arr) => arr.slice())
 
-    let tempPlayerSign =
-      Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
+    let tempPlayerSign = getRandomPlayerSign()
     isComputerTurn = tempPlayerSign !== cellTypes.FIRST_PLAYER
 
     setPlayerSign(tempPlayerSign)
@@ -275,21 +240,23 @@ function Game() {
   }
 
   return (
-    <div className="board">
-      <main className="board-main">
+    <Container className="board">
+      <Container className="board-main">
         <Grid container justifyContent="center">
-          <h2 className="game-hints">{hintsText}</h2>
+          <Typography variant="h2" sx={gameHintsSX}>
+            {hintsText}
+          </Typography>
         </Grid>
 
-        {mapBoard()}
+        <Board board={board} playTurn={playTurn} />
 
         <Grid container justifyContent="center">
           <button className="replay-button" onClick={startNewGame}>
             NEW GAME
           </button>
         </Grid>
-      </main>
-    </div>
+      </Container>
+    </Container>
   )
 }
 

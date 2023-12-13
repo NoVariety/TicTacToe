@@ -2,7 +2,7 @@ import React from "react"
 import "./App.css"
 import Grid from "@mui/material/Grid"
 
-import Game from "./components/game"
+import Game from "./components/game/game"
 
 function App() {
   return (

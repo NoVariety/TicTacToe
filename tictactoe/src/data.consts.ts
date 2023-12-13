@@ -1,10 +1,10 @@
-import React from "react"
-
 const enum cellTypes {
   EMPTY = "",
   FIRST_PLAYER = "x",
   SECOND_PLAYER = "o",
 }
+
+const BOARD_LENGTH: number = 3
 
 const hintTextOptions: string[] = [
   "KNOW YOURSELF AND YOU WILL WIN ALL BATTLES",
@@ -32,4 +32,4 @@ const hintTextOptions: string[] = [
   "SO IN WAR, THE WAY IS TO AVOID WHAT IS STRONG, AND STRIKE AT WHAT IS WEAK",
 ]
 
-export { cellTypes, hintTextOptions }
+export { cellTypes, hintTextOptions, BOARD_LENGTH }
