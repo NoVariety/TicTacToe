@@ -1,36 +1,3 @@
-.board-cell {
-  height: 12vh;
-  width: 12vh;
-
-  background: transparent;
-  padding: 0.5rem 0.5rem;
-  margin: 0 0.5rem;
-  margin-bottom: 1rem;
-
-  color: #302c2c;
-
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
-  border-bottom-right-radius: 225px 15px;
-  border-bottom-left-radius: 15px 255px;
-  border: solid 0.5vh;
-
-  cursor: crosshair;
-
-  float: center;
-}
-
 .board-cell:hover {
   box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-}
-
-.cell-sign {
-  text-align: center;
-  line-height: 10vh;
-  margin: auto;
-
-  color: #302c2c;
-
-  font-family: "Permanent Marker", sans-serif;
-  font-size: 5vw;
 }

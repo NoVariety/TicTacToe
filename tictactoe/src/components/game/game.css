@@ -1,16 +1,4 @@
-.game-hints {
-  cursor: vertical-text;
-
-  margin-bottom: 2rem;
-  max-width: 60vh;
-  height: 6vh;
-
-  font-size: 3vh;
-  text-align: center;
-  word-wrap: break-word;
-}
-
-button {
+.new-game-button {
   background: transparent;
   padding: 1rem 2rem;
   margin: 1rem;
@@ -36,13 +24,11 @@ button {
   transition: 1.25s ease;
 
   filter: brightness(0.5) saturate(0%);
-
-  &:hover {
-    background-position: 500% 100%;
-  }
 }
 
 button:hover {
+  background-position: 500% 100%;
+
   color: rgb(255, 255, 255);
   box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
 
@@ -58,6 +44,6 @@ button[disabled] {
   cursor: default;
 } */
 
-.replay-button {
+.new-game-button {
   width: 15rem;
 }

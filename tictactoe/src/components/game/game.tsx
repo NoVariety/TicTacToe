@@ -4,7 +4,6 @@ import "./game.css"
 import { gameHintsSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
-import Button from "@mui/material/Button"
 import Container from "@mui/material/Container"
 import Board from "../board/board"
 import Typography from "@mui/material/Typography"
@@ -18,23 +17,18 @@ import {
   isBoardFull,
 } from "../../utils/gameUtils"
 
-//TODO: move all possible css to sx for style tags from MUI
-
 enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
   DRAW_MESSAGE = "IT'S A DRAW!",
   LOSS_MESSAGE = "YOU LOSE!",
 }
 
-//! fix bug in which drawing the game as X causes an infinite look before last turn
+//! fix bug in which drawing the game as X causes an infinite loop before last turn
 
 function Game() {
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
   const [board, setBoard] = useState<cellTypes[][]>(createEmptyBoard())
-
-  //! לבדוק אם אפשר להעביר את הJUSTIFY CONTENT ETC.. לSTYLE
-  //! type sx props
 
   let isComputerTurn: boolean = playerSign !== cellTypes.FIRST_PLAYER
 
@@ -224,7 +218,6 @@ function Game() {
 
   // TODO:
   // ? make winning cooler
-  // ? disable new game button unless game can't progress
 
   function startNewGame(): void {
     setHintsText(getRandomHint())
@@ -251,7 +244,7 @@ function Game() {
         <Board board={board} playTurn={playTurn} />
 
         <Grid container justifyContent="center">
-          <button className="replay-button" onClick={startNewGame}>
+          <button className="new-game-button" onClick={startNewGame}>
             NEW GAME
           </button>
         </Grid>

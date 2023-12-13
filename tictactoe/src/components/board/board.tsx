@@ -11,7 +11,11 @@ type Props = {
 
 function Board(props: Props) {
   return (
-    <Grid container item justifyContent="center" alignItems="center">
+    <Grid
+      container
+      item
+      sx={{ alignItems: "center", justifyContent: "center" }}
+    >
       {props.board.map((row, rowIndex) => (
         <Box gridRow="span 3">
           {row.map((cell, colIndex) => (

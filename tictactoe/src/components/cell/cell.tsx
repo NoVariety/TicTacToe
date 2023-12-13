@@ -3,7 +3,8 @@ import "./cell.css"
 import Grid from "@mui/material/Grid"
 
 import { cellTypes } from "../../data.consts"
-//! take props out individually => decided it is better not to as it diffrentiates props from normal params
+import { Container, Typography } from "@mui/material"
+import { boardCellSX, signSX } from "./cellStyle"
 
 type Props = {
   index: number
@@ -14,9 +15,15 @@ type Props = {
 function Cell(props: Props) {
   return (
     <Grid item xs={0} sm={4} md={1} key={props.index}>
-      <div className="board-cell" onClick={props.playTurn}>
-        <p className="cell-sign">{props.sign}</p>
-      </div>
+      <Container
+        onClick={props.playTurn}
+        sx={boardCellSX}
+        className="board-cell"
+      >
+        <Typography variant="h1" sx={signSX}>
+          {props.sign}
+        </Typography>
+      </Container>
     </Grid>
   )
 }

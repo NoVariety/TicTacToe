@@ -1,13 +1,15 @@
-const gameHintsSX: Object = {
+import { SxProps } from "@mui/material"
+
+const gameHintsSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   cursor: "vertical-text",
   marginBottom: "2rem",
-  maxWidth: "60vh",
+  maxWidth: "65vh",
   height: "6vh",
-  fontSize: "3vh",
+  fontSize: "3.3vh",
   textAlign: "center",
   wordWrap: "break-word",
-  fontWeight: "700",
+  fontWeight: "600",
 }
 
 export { gameHintsSX }
