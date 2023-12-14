@@ -19,12 +19,13 @@ const newGameButtonSX: SxProps = {
   padding: "1rem 2rem",
   margin: "1rem",
   fontSize: "2rem",
+  fontWeight: "600",
 
   borderTopLeftRadius: "255px 15px",
   borderTopRightRadius: "15px 225px",
   borderBottomRightRadius: "225px 15px",
   borderBottomLeftRadius: "15px 255px",
-  border: "solid 0.3vh",
+  border: "solid 0.4vh",
   lineHeight: "4vh",
   cursor: "pointer",
   color: "#302c2c",
@@ -46,4 +47,25 @@ const newGameButtonSX: SxProps = {
   },
 }
 
-export { gameHintsSX, newGameButtonSX }
+const rewindButtonSX: SxProps = {
+  cursor: "pointer",
+  marginTop: "2.6vh",
+  maxWidth: "7vh",
+  maxHeight: "7vh",
+  borderRadius: "45%",
+  backgroundSize: "contain",
+  backgroundRepeat: "no-repeat",
+  backgroundImage: `url(https://cdn-icons-png.flaticon.com/128/5542/5542182.png)`,
+  "&:hover": {
+    borderColor: "#302c2c",
+    backgroundPosition: "50% 50%",
+    transition: "0.3s",
+    boxShadow: "3px 6px 5px -6px hsla(0, 0%, 0%, 0.5)",
+  },
+
+  "&:disabled": {
+    filter: "invert(80%)",
+  },
+}
+
+export { gameHintsSX, newGameButtonSX, rewindButtonSX }

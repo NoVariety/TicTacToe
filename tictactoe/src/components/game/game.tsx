@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { gameHintsSX, newGameButtonSX } from "./gameStyle"
+import { gameHintsSX, newGameButtonSX, rewindButtonSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
@@ -199,7 +199,7 @@ function Game() {
   }
 
   function isThereAWinner(): boolean {
-    const isGameWon: boolean = checkRowsCols() || checkSlashes()
+    const isGameWon: boolean = checkSlashes() || checkRowsCols()
     if (!isGameWon && isBoardFull(board)) {
       setHintsText(gameStateMessages.DRAW_MESSAGE)
     }
@@ -219,9 +219,6 @@ function Game() {
     }
   }, [board])
 
-  // TODO:
-  // ? make winning cooler
-
   function startNewGame(): void {
     setHintsText(getRandomHint())
 
@@ -232,6 +229,14 @@ function Game() {
 
     setPlayerSign(getRandomPlayerSign())
     setNewGameToggle((prev) => !prev)
+  }
+
+  function isRewindDisabled(): boolean {
+    return calculateTotalMovesMade() < 1
+  }
+
+  function rewindTurn(): void {
+    console.log("ITS REWIND TIME!")
   }
 
   return (
@@ -246,6 +251,11 @@ function Game() {
         <Board board={board} playTurn={playTurn} />
 
         <Grid container justifyContent="center">
+          <Button
+            onClick={rewindTurn}
+            disabled={isRewindDisabled()}
+            sx={rewindButtonSX}
+          ></Button>
           <Button onClick={startNewGame} sx={newGameButtonSX}>
             NEW GAME
           </Button>

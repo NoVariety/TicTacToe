@@ -4,10 +4,6 @@ function getRandomPlayerSign(): cellTypes {
   return Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
 }
 
-function getRandomCoordinate(boardLength: number): number {
-  return Math.floor(Math.random() * boardLength)
-}
-
 function getRandomHint(): string {
   const index = Math.floor(Math.random() * hintTextOptions.length)
   return hintTextOptions[index]
@@ -39,7 +35,6 @@ function getRandomCoordinateObject(
 
 export {
   getRandomPlayerSign,
-  getRandomCoordinate,
   getRandomHint,
   createEmptyBoard,
   isBoardFull,
