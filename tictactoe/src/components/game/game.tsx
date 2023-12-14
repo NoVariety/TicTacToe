@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 
-import "./game.css"
-import { gameHintsSX } from "./gameStyle"
+import { gameHintsSX, newGameButtonSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
@@ -17,6 +16,7 @@ import {
   createLegalMoves,
   getRandomCoordinateObject,
 } from "../../utils/gameUtils"
+import { Button } from "@mui/material"
 
 enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
@@ -207,11 +207,16 @@ function Game() {
     return isGameWon
   }
 
+  function calculateTotalMovesMade(): number {
+    return BOARD_LENGTH * BOARD_LENGTH - legalMoves.length
+  }
+
   useEffect(() => {
-    //! check if the minimum possible moves for a win were made
-    //* how? when i do the array of free cells,
-    //* check (board lengh * board length) - array length to see num of moves made
-    isThereAWinner()
+    const MINIMUM_MOVES_REQUIRED_TO_WIN: number = BOARD_LENGTH * 2 - 1
+
+    if (calculateTotalMovesMade() >= MINIMUM_MOVES_REQUIRED_TO_WIN) {
+      isThereAWinner()
+    }
   }, [board])
 
   // TODO:
@@ -241,9 +246,9 @@ function Game() {
         <Board board={board} playTurn={playTurn} />
 
         <Grid container justifyContent="center">
-          <button className="new-game-button" onClick={startNewGame}>
+          <Button onClick={startNewGame} sx={newGameButtonSX}>
             NEW GAME
-          </button>
+          </Button>
         </Grid>
       </Container>
     </Container>
