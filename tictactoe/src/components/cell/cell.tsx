@@ -1,5 +1,3 @@
-import "./cell.css"
-
 import Grid from "@mui/material/Grid"
 
 import { cellTypes } from "../../data.consts"
@@ -15,11 +13,7 @@ type Props = {
 function Cell(props: Props) {
   return (
     <Grid item xs={0} sm={4} md={1} key={props.index}>
-      <Container
-        onClick={props.playTurn}
-        sx={boardCellSX}
-        className="board-cell"
-      >
+      <Container onClick={props.playTurn} sx={boardCellSX}>
         <Typography variant="h1" sx={signSX}>
           {props.sign}
         </Typography>

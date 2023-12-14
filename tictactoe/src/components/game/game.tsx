@@ -8,13 +8,14 @@ import Container from "@mui/material/Container"
 import Board from "../board/board"
 import Typography from "@mui/material/Typography"
 
-import { cellTypes, BOARD_LENGTH } from "../../data.consts"
+import { cellTypes, legalMovesObj } from "../../data.consts"
 import {
   getRandomPlayerSign,
-  getRandomCoordinate,
   getRandomHint,
   createEmptyBoard,
   isBoardFull,
+  createLegalMoves,
+  getRandomCoordinateObject,
 } from "../../utils/gameUtils"
 
 enum gameStateMessages {
@@ -23,14 +24,14 @@ enum gameStateMessages {
   LOSS_MESSAGE = "YOU LOSE!",
 }
 
-//! fix bug in which drawing the game as X causes an infinite loop before last turn
-
 function Game() {
+  const BOARD_LENGTH: number = 3
+
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
-  const [board, setBoard] = useState<cellTypes[][]>(createEmptyBoard())
-
-  let isComputerTurn: boolean = playerSign !== cellTypes.FIRST_PLAYER
+  const [board, setBoard] = useState<cellTypes[][]>(
+    createEmptyBoard(BOARD_LENGTH)
+  )
 
   let tempBoard: cellTypes[][] = board.map((arr) => arr.slice())
 
@@ -38,64 +39,54 @@ function Game() {
 
   useEffect(() => {
     function doFirstComputerPlay(): void {
-      if (isComputerTurn) {
-        isComputerTurn = false
-
-        tempBoard[getRandomCoordinate()][getRandomCoordinate()] =
-          cellTypes.FIRST_PLAYER
-        setBoard(tempBoard)
+      if (playerSign !== cellTypes.FIRST_PLAYER) {
+        computerTurn()
       }
     }
 
     doFirstComputerPlay()
   }, [newGameToggle])
 
-  function changeSign(cellSign: cellTypes, playSign: cellTypes): cellTypes {
-    if (cellSign === cellTypes.EMPTY) {
-      isComputerTurn = false
-
-      return playSign
-    }
-    return cellSign
-  }
+  const [legalMoves, setLegalMoves] = useState<Array<legalMovesObj>>(
+    createLegalMoves(BOARD_LENGTH)
+  )
 
   function changeCell(
     rowIndex: number,
     colIndex: number,
     playSign: cellTypes
   ): void {
+    const moveObj: legalMovesObj = { row: rowIndex, col: colIndex }
+
+    removeFromLegalMoves(moveObj)
+
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
   }
 
-  //****************************************************************************/ rennovate as a bulk => from here
-  //! useEffect instead of isComputerTurn
+  function removeFromLegalMoves(movesObj: legalMovesObj): void {
+    setLegalMoves((prev) =>
+      prev.filter(
+        (move) => move.col !== movesObj.col || move.row !== movesObj.row
+      )
+    )
+  }
+
+  const [isComputerTurn, setIsComputerTurn] = useState<boolean>(
+    playerSign !== cellTypes.FIRST_PLAYER
+  )
+
   function computerTurn(): void {
     const computerSign: cellTypes =
       playerSign === cellTypes.FIRST_PLAYER
         ? cellTypes.SECOND_PLAYER
         : cellTypes.FIRST_PLAYER
-    let rowIndex: number = getRandomCoordinate() //! remove randoms
-    let colIndex: number = getRandomCoordinate()
-    let sign: cellTypes = cellTypes.EMPTY
+    const movesObj: legalMovesObj = getRandomCoordinateObject(legalMoves)
 
-    //! make more effcient
-    //* IDEA:
-    //? make an indexes array the size of the board
-    //? for example: [{x: 0,y: 0}, {x: 1,y: 0}, {x: 2,y: 0}... {x: 2,y: 2}...].
-    //? each time get random number between 0 and indexes array -1 to get a random indexes object
-    //? after taking an indexes object out, remove it from the array
-    //? on player turn, search the object matching the indexes of the play and remove it
-    //? this way while is unnecessary as is isComputerTurn and it will work much faster on bigger boards
-    while (isComputerTurn) {
-      rowIndex = getRandomCoordinate()
-      colIndex = getRandomCoordinate()
-      sign = changeSign(tempBoard[rowIndex][colIndex], computerSign)
+    if (legalMoves.length > 0) {
+      changeCell(movesObj.row, movesObj.col, computerSign)
     }
-
-    changeCell(rowIndex, colIndex, sign)
   }
-  //****************************************************************************/                 => to here
 
   function setWinnerMessage(winnerSign: cellTypes): void {
     setHintsText(
@@ -104,6 +95,15 @@ function Game() {
         : gameStateMessages.LOSS_MESSAGE
     )
   }
+
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+  useEffect(() => {
+    if (!isFirstRender) {
+      computerTurn()
+    } else {
+      setIsFirstRender(false)
+    }
+  }, [isComputerTurn])
 
   function playTurn(rowIndex: number, colIndex: number): void {
     if (!isBoardFull(board) && !isThereAWinner()) {
@@ -114,10 +114,8 @@ function Game() {
 
         changeCell(rowIndex, colIndex, playerSign)
 
-        isComputerTurn = true //! try making it a state
-
         if (!isBoardFull(board) && !isThereAWinner()) {
-          computerTurn()
+          setIsComputerTurn((prev) => !prev)
         }
       }
     }
@@ -222,13 +220,12 @@ function Game() {
   function startNewGame(): void {
     setHintsText(getRandomHint())
 
-    setBoard(createEmptyBoard())
+    setBoard(createEmptyBoard(BOARD_LENGTH))
     tempBoard = board.map((arr) => arr.slice())
 
-    let tempPlayerSign = getRandomPlayerSign()
-    isComputerTurn = tempPlayerSign !== cellTypes.FIRST_PLAYER
+    setLegalMoves(createLegalMoves(BOARD_LENGTH))
 
-    setPlayerSign(tempPlayerSign)
+    setPlayerSign(getRandomPlayerSign())
     setNewGameToggle((prev) => !prev)
   }
 

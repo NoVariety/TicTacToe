@@ -15,6 +15,9 @@ const boardCellSX: SxProps = {
   border: "solid 0.5vh",
   cursor: "crosshair",
   float: "center",
+  "&:hover": {
+    boxShadow: "2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)",
+  },
 }
 
 const signSX: SxProps = {

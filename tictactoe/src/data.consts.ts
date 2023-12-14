@@ -4,8 +4,6 @@ const enum cellTypes {
   SECOND_PLAYER = "o",
 }
 
-const BOARD_LENGTH: number = 3
-
 const hintTextOptions: string[] = [
   "KNOW YOURSELF AND YOU WILL WIN ALL BATTLES",
   "OPPORTUNITIES MULTIPLY AS THEY ARE SEIZED",
@@ -32,4 +30,9 @@ const hintTextOptions: string[] = [
   "SO IN WAR, THE WAY IS TO AVOID WHAT IS STRONG, AND STRIKE AT WHAT IS WEAK",
 ]
 
-export { cellTypes, hintTextOptions, BOARD_LENGTH }
+type legalMovesObj = {
+  row: number
+  col: number
+}
+
+export { cellTypes, hintTextOptions, type legalMovesObj }

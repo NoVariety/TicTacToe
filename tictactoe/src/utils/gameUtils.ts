@@ -1,11 +1,11 @@
-import { cellTypes, hintTextOptions, BOARD_LENGTH } from "../data.consts"
+import { cellTypes, hintTextOptions, legalMovesObj } from "../data.consts"
 
 function getRandomPlayerSign(): cellTypes {
   return Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
 }
 
-function getRandomCoordinate(): number {
-  return Math.floor(Math.random() * BOARD_LENGTH)
+function getRandomCoordinate(boardLength: number): number {
+  return Math.floor(Math.random() * boardLength)
 }
 
 function getRandomHint(): string {
@@ -13,20 +13,28 @@ function getRandomHint(): string {
   return hintTextOptions[index]
 }
 
-function createEmptyBoard(): cellTypes[][] {
-  return Array(BOARD_LENGTH).fill(new Array(BOARD_LENGTH).fill(cellTypes.EMPTY))
+function createEmptyBoard(boardLength: number): cellTypes[][] {
+  return Array(boardLength).fill(new Array(boardLength).fill(cellTypes.EMPTY))
 }
 function isBoardFull(board: cellTypes[][]): boolean {
-  // for (let rowIndex: number = 0; rowIndex < BOARD_LENGTH; rowIndex++) {
-  //   for (let colIndex: number = 0; colIndex < BOARD_LENGTH; colIndex++) {
-  //     if (tempBoard[rowIndex][colIndex] === cellTypes.EMPTY) {
-  //       return false
-  //     }
-  //   }
-  // }
-
-  // return true
   return board.every((row) => row.every((col) => col !== cellTypes.EMPTY))
+}
+
+function createLegalMoves(boardLength: number): Array<legalMovesObj> {
+  let legalMovesArr: Array<legalMovesObj> = []
+  for (let row: number = 0; row < boardLength; row++) {
+    for (let col: number = 0; col < boardLength; col++) {
+      legalMovesArr.push({ row: row, col: col })
+    }
+  }
+
+  return legalMovesArr
+}
+
+function getRandomCoordinateObject(
+  legalMovesArr: Array<legalMovesObj>
+): legalMovesObj {
+  return legalMovesArr[Math.floor(Math.random() * legalMovesArr.length)]
 }
 
 export {
@@ -35,4 +43,6 @@ export {
   getRandomHint,
   createEmptyBoard,
   isBoardFull,
+  createLegalMoves,
+  getRandomCoordinateObject,
 }
