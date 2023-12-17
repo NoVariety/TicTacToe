@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { gameHintsSX, newGameButtonSX } from "./gameStyle"
+import { gameHintsSX, newGameButtonSX, rewindButtonSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 
 import Board from "../board/board"
-import Rewind from "../rewind/rewind"
 
 import { cellTypes, legalMovesObj } from "../../data.consts"
 import {
@@ -52,6 +51,7 @@ function Game() {
   const [legalMoves, setLegalMoves] = useState<Array<legalMovesObj>>(
     createLegalMoves(BOARD_LENGTH)
   )
+  const [movesMade, setMovesMade] = useState<Array<legalMovesObj>>([])
 
   function changeCell(
     rowIndex: number,
@@ -61,6 +61,7 @@ function Game() {
     const moveObj: legalMovesObj = { row: rowIndex, col: colIndex }
 
     removeFromLegalMoves(moveObj)
+    setMovesMade((prev) => [...prev, moveObj])
 
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
@@ -74,7 +75,7 @@ function Game() {
     )
   }
 
-  const [isComputerTurn, setIsComputerTurn] = useState<boolean>(
+  const [computerTurnToggle, setComputerTurnToggle] = useState<boolean>(
     playerSign !== cellTypes.FIRST_PLAYER
   )
 
@@ -105,7 +106,7 @@ function Game() {
     } else {
       setIsFirstRender(false)
     }
-  }, [isComputerTurn])
+  }, [computerTurnToggle])
 
   function playTurn(rowIndex: number, colIndex: number): void {
     if (!isBoardFull(board) && !isThereAWinner()) {
@@ -117,7 +118,7 @@ function Game() {
         changeCell(rowIndex, colIndex, playerSign)
 
         if (!isBoardFull(board) && !isThereAWinner()) {
-          setIsComputerTurn((prev) => !prev)
+          setComputerTurnToggle((prev) => !prev)
         }
       }
     }
@@ -228,30 +229,37 @@ function Game() {
     tempBoard = board.map((arr) => arr.slice())
 
     setLegalMoves(createLegalMoves(BOARD_LENGTH))
+    setMovesMade([])
 
     setPlayerSign(getRandomPlayerSign())
     setNewGameToggle((prev) => !prev)
   }
 
-  //TODO: rewind button that can rewind to any stage of the game till board is empty
-  //! OPTION 3: (HARD MODE)
-  //* save boards in array, clicking on the rewind button opens a window with all previous boards in the game,
-  //* clicking on a board sets it as the current game board
-  //* HOW?
-  //? OPTION 1:
-  //? save state array of objects containing move array and current board
-  //? for showing the boards: display the board property in the object
-  //? OPTION 2:
-  //? save moved plays stack, push played moves (including the sign played) into stack and pop from stack on move play,
-  //? for showing the boards: play the moves in the played moves stack but replace with EMPTY
-  //? push the moves back into the unplayed moves array
+  function popMovesMade(): legalMovesObj {
+    const moveObj: legalMovesObj = movesMade[movesMade.length - 1]
+    setMovesMade((prev) =>
+      prev.filter(
+        (move) => move.col !== moveObj.col || move.row !== moveObj.row
+      )
+    )
+    return moveObj
+  }
 
-  const [isRewindOpen, setIsRewindOpen] = useState(false)
-  const handleRewindOpen = () => setIsRewindOpen(true)
-  const handleRewindClose = () => setIsRewindOpen(false)
+  function rewindTurn(): void {
+    const moveObj: legalMovesObj = popMovesMade()
+    setLegalMoves((prev) => [...prev, moveObj])
 
-  function isRewindDisabled(): boolean {
-    return calculateTotalMovesMade() < 1
+    tempBoard[moveObj.row][moveObj.col] = cellTypes.EMPTY
+    setBoard(tempBoard)
+  }
+
+  function toggleOffRewind(): boolean {
+    return (
+      !(movesMade.length > 0) ||
+      hintsText === gameStateMessages.DRAW_MESSAGE ||
+      hintsText === gameStateMessages.WIN_MESSAGE ||
+      hintsText === gameStateMessages.LOSS_MESSAGE
+    )
   }
 
   return (
@@ -271,7 +279,11 @@ function Game() {
           justifyContent="center"
           alignItems="center"
         >
-          <Rewind isRewindDisabled={isRewindDisabled} />
+          <Button
+            disabled={toggleOffRewind()}
+            onClick={rewindTurn}
+            sx={rewindButtonSX}
+          ></Button>
 
           <Button onClick={startNewGame} sx={newGameButtonSX}>
             NEW GAME
