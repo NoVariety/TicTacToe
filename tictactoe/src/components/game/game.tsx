@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react"
 
-import { gameHintsSX, newGameButtonSX, rewindButtonSX } from "./gameStyle"
+import { gameHintsSX, newGameButtonSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
-import Board from "../board/board"
 import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+
+import Board from "../board/board"
+import Rewind from "../rewind/rewind"
 
 import { cellTypes, legalMovesObj } from "../../data.consts"
 import {
@@ -16,7 +19,6 @@ import {
   createLegalMoves,
   getRandomCoordinateObject,
 } from "../../utils/gameUtils"
-import { Button } from "@mui/material"
 
 enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
@@ -231,12 +233,25 @@ function Game() {
     setNewGameToggle((prev) => !prev)
   }
 
+  //TODO: rewind button that can rewind to any stage of the game till board is empty
+  //! OPTION 3: (HARD MODE)
+  //* save boards in array, clicking on the rewind button opens a window with all previous boards in the game,
+  //* clicking on a board sets it as the current game board
+  //* HOW?
+  //? OPTION 1:
+  //? save state array of objects containing move array and current board
+  //? for showing the boards: display the board property in the object
+  //? OPTION 2:
+  //? save moved plays stack, push played moves (including the sign played) into stack and pop from stack on move play,
+  //? for showing the boards: play the moves in the played moves stack but replace with EMPTY
+  //? push the moves back into the unplayed moves array
+
+  const [isRewindOpen, setIsRewindOpen] = useState(false)
+  const handleRewindOpen = () => setIsRewindOpen(true)
+  const handleRewindClose = () => setIsRewindOpen(false)
+
   function isRewindDisabled(): boolean {
     return calculateTotalMovesMade() < 1
-  }
-
-  function rewindTurn(): void {
-    console.log("ITS REWIND TIME!")
   }
 
   return (
@@ -250,12 +265,14 @@ function Game() {
 
         <Board board={board} playTurn={playTurn} />
 
-        <Grid container justifyContent="center">
-          <Button
-            onClick={rewindTurn}
-            disabled={isRewindDisabled()}
-            sx={rewindButtonSX}
-          ></Button>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Rewind isRewindDisabled={isRewindDisabled} />
+
           <Button onClick={startNewGame} sx={newGameButtonSX}>
             NEW GAME
           </Button>
