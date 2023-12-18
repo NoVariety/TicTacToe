@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography"
 type props = {
   open: boolean
   handleClose: () => void
+  showRewindHint: boolean
 }
 
 //! change props - split them instead of using props.something
@@ -22,9 +23,11 @@ export default function PauseScreenModal(props: props) {
         <Typography variant="h2" sx={pauseTextSX}>
           CLICK ANYWHERE TO CONTINUE
         </Typography>
-        <Typography variant="h4" sx={pauseSubextSX}>
-          click ^ this to rewind more turns
-        </Typography>
+        {props.showRewindHint && (
+          <Typography variant="h4" sx={pauseSubextSX}>
+            click ^ this to rewind more turns
+          </Typography>
+        )}
       </Container>
     </Modal>
   )

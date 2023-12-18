@@ -19,6 +19,7 @@ import {
   createLegalMoves,
   getRandomCoordinateObject,
 } from "../../utils/gameUtils"
+import { SxProps } from "@mui/material"
 
 enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
@@ -27,8 +28,6 @@ enum gameStateMessages {
 }
 
 //! make state messages pop up more
-//! enable new game through pause modal
-//! disable click ^ this thing on modal when button is disabled
 
 function Game() {
   const BOARD_LENGTH: number = 3
@@ -115,7 +114,7 @@ function Game() {
   }, [computerTurnToggle])
 
   function playTurn(rowIndex: number, colIndex: number): void {
-    if (!isBoardFull(board) && !isThereAWinner()) {
+    if (!isBoardFull(legalMoves) && !isThereAWinner()) {
       if (tempBoard[rowIndex][colIndex] !== cellTypes.EMPTY) {
         setHintsText("⚠ THIS CELL IS FULL, TRY ANOTHER ONE ⚠︎")
       } else {
@@ -123,8 +122,7 @@ function Game() {
 
         changeCell(rowIndex, colIndex, playerSign)
 
-        //! change isBoardFull func
-        if (!isBoardFull(board) && !isThereAWinner()) {
+        if (!isBoardFull(legalMoves) && !isThereAWinner()) {
           setComputerTurnToggle((prev) => !prev)
         }
       }
@@ -210,7 +208,7 @@ function Game() {
 
   function isThereAWinner(): boolean {
     const isGameWon: boolean = checkSlashes() || checkRowsCols()
-    if (!isGameWon && isBoardFull(board)) {
+    if (!isGameWon && isBoardFull(legalMoves)) {
       setHintsText(gameStateMessages.DRAW_MESSAGE)
     }
 
@@ -267,7 +265,6 @@ function Game() {
     }
   }
 
-  //! change pauseScreen component name to pauseScreenModal
   const [pauseModalOpen, setPauseModalOpen] = useState(false)
   const handlePauseModalOpen = () => setPauseModalOpen(true)
   const handlePauseModalClose = () => {
@@ -287,6 +284,19 @@ function Game() {
     )
   }
 
+  const rewindDisabledProp: SxProps = {
+    ...(pauseModalOpen && { filter: "none !important" }),
+    ...(pauseModalOpen &&
+      movesMade.length >= 1 && {
+        outline: "5px dashed #555",
+        borderRadius: "4vh",
+        outlineColor: "white",
+        "&:hover": {
+          outlineColor: "transparent",
+        },
+      }),
+  } as const
+
   return (
     <Container>
       <Grid container justifyContent="center">
@@ -300,6 +310,7 @@ function Game() {
       <PauseScreenModal
         open={pauseModalOpen}
         handleClose={handlePauseModalClose}
+        showRewindHint={movesMade.length > 0}
       />
 
       <Grid
@@ -311,7 +322,7 @@ function Game() {
         <Button
           disabled={toggleOffRewind()}
           onClick={rewindTurn}
-          sx={rewindButtonSX}
+          sx={{ ...rewindButtonSX, p: rewindDisabledProp }}
         ></Button>
 
         <Button onClick={startNewGame} sx={newGameButtonSX}>

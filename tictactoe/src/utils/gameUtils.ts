@@ -13,9 +13,8 @@ function createEmptyBoard(boardLength: number): cellTypes[][] {
   return Array(boardLength).fill(new Array(boardLength).fill(cellTypes.EMPTY))
 }
 
-//! change to match the legal moves array
-function isBoardFull(board: cellTypes[][]): boolean {
-  return board.every((row) => row.every((col) => col !== cellTypes.EMPTY))
+function isBoardFull(legalMoves: legalMoves[]): boolean {
+  return legalMoves.length === 0
 }
 
 function createLegalMoves(boardLength: number): Array<legalMoves> {
