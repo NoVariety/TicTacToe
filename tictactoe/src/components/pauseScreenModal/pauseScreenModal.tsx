@@ -15,15 +15,18 @@ type props = {
   showRewindHint: boolean
 }
 
-//! change props - split them instead of using props.something
-export default function PauseScreenModal(props: props) {
+export default function PauseScreenModal({
+  open,
+  handleClose,
+  showRewindHint,
+}: props) {
   return (
-    <Modal open={props.open} onClose={props.handleClose} sx={modalSX}>
+    <Modal open={open} onClose={handleClose} sx={modalSX}>
       <Container sx={containerSX}>
         <Typography variant="h2" sx={pauseTextSX}>
           CLICK ANYWHERE TO CONTINUE
         </Typography>
-        {props.showRewindHint && (
+        {showRewindHint && (
           <Typography variant="h4" sx={pauseSubextSX}>
             click ^ this to rewind more turns
           </Typography>

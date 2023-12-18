@@ -10,17 +10,14 @@ type Props = {
   playTurn: () => void
 }
 
-//! change props - split them instead of using props.something
-function Cell(props: Props) {
+export default function Cell({ index, sign, playTurn }: Props) {
   return (
-    <Grid item xs={0} sm={4} md={1} key={props.index}>
-      <Container onClick={props.playTurn} sx={boardCellSX}>
+    <Grid item xs={0} sm={4} md={1} key={index}>
+      <Container onClick={playTurn} sx={boardCellSX}>
         <Typography variant="h1" sx={signSX}>
-          {props.sign}
+          {sign}
         </Typography>
       </Container>
     </Grid>
   )
 }
-
-export default Cell

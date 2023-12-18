@@ -3,28 +3,23 @@ import Box from "@mui/material/Box"
 
 import Cell from "../cell/cell"
 import { cellTypes } from "../../data.consts"
+import { boardGridSX } from "./boardStyle"
 
 type Props = {
   board: cellTypes[][]
   playTurn: Function
 }
 
-//! change props - split them instead of using props.something
-function Board(props: Props) {
+export default function Board({ board, playTurn }: Props) {
   return (
-    <Grid
-      container
-      item
-      //! move sx into a dedicated file
-      sx={{ alignItems: "center", justifyContent: "center" }}
-    >
-      {props.board.map((row, rowIndex) => (
+    <Grid container item sx={boardGridSX}>
+      {board.map((row, rowIndex) => (
         <Box gridRow="span 3">
           {row.map((cell, colIndex) => (
             <Cell
               sign={row[colIndex]}
               index={colIndex}
-              playTurn={() => props.playTurn(rowIndex, colIndex)}
+              playTurn={() => playTurn(rowIndex, colIndex)}
             />
           ))}
         </Box>
@@ -32,5 +27,3 @@ function Board(props: Props) {
     </Grid>
   )
 }
-
-export default Board

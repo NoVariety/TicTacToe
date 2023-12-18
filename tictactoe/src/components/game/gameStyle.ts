@@ -72,4 +72,20 @@ const rewindButtonSX: SxProps = {
   },
 }
 
-export { gameHintsSX, newGameButtonSX, rewindButtonSX }
+const actionButtonsGridSX: SxProps = {
+  direction: "row",
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const gridCenterSX: SxProps = {
+  justifyContent: "center",
+}
+
+export {
+  gameHintsSX,
+  newGameButtonSX,
+  rewindButtonSX,
+  actionButtonsGridSX,
+  gridCenterSX,
+}

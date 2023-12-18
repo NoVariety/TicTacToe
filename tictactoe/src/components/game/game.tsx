@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react"
 
-import { gameHintsSX, newGameButtonSX, rewindButtonSX } from "./gameStyle"
+import {
+  gameHintsSX,
+  newGameButtonSX,
+  rewindButtonSX,
+  actionButtonsGridSX,
+  gridCenterSX,
+} from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
+import { SxProps } from "@mui/material"
 
 import Board from "../board/board"
-import PauseScreenModal from "../pauseScreen/pauseScreenModal"
+import PauseScreenModal from "../pauseScreenModal/pauseScreenModal"
 
-import { cellTypes, legalMoves } from "../../data.consts"
+import { cellTypes, legalMoves, gameStateMessages } from "../../data.consts"
 import {
   getRandomPlayerSign,
   getRandomHint,
@@ -19,13 +26,6 @@ import {
   createLegalMoves,
   getRandomCoordinateObject,
 } from "../../utils/gameUtils"
-import { SxProps } from "@mui/material"
-
-enum gameStateMessages {
-  WIN_MESSAGE = "YOU WIN!",
-  DRAW_MESSAGE = "IT'S A DRAW!",
-  LOSS_MESSAGE = "YOU LOSE!",
-}
 
 //! make state messages pop up more
 
@@ -103,7 +103,7 @@ function Game() {
     )
   }
 
-  //! check why i did this and if possible to improve it
+  //* prevents rendering twice or wrong turn on first render
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   useEffect(() => {
     if (!isFirstRender) {
@@ -291,7 +291,10 @@ function Game() {
         outline: "5px dashed #555",
         borderRadius: "4vh",
         outlineColor: "white",
+        transition: "0.5s",
+
         "&:hover": {
+          transition: "0.2s",
           outlineColor: "transparent",
         },
       }),
@@ -299,7 +302,7 @@ function Game() {
 
   return (
     <Container>
-      <Grid container justifyContent="center">
+      <Grid container sx={gridCenterSX}>
         <Typography variant="h2" sx={gameHintsSX}>
           {hintsText}
         </Typography>
@@ -313,12 +316,7 @@ function Game() {
         showRewindHint={movesMade.length > 0}
       />
 
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Grid container sx={actionButtonsGridSX}>
         <Button
           disabled={toggleOffRewind()}
           onClick={rewindTurn}
