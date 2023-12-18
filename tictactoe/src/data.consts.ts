@@ -39,6 +39,7 @@ enum gameStateMessages {
   WIN_MESSAGE = "YOU WIN!",
   DRAW_MESSAGE = "IT'S A DRAW!",
   LOSS_MESSAGE = "YOU LOSE!",
+  GAME_ONGOING = "",
 }
 
 export { cellTypes, hintTextOptions, type legalMoves, gameStateMessages }

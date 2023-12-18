@@ -7,7 +7,7 @@ const boardCellSX: SxProps = {
   padding: "0.5rem 0.5rem",
   margin: "0 0.5rem",
   marginBottom: "1rem",
-  color: "#302c2c",
+  color: "#1d1d1d",
   borderTopLeftRadius: "255px 15px",
   borderTopRightRadius: "15px 225px",
   borderBottomRightRadius: "225px 15px",
@@ -24,7 +24,7 @@ const signSX: SxProps = {
   textAlign: "center",
   lineHeight: "10vh",
   margin: "auto",
-  color: "#302c2c",
+  color: "#1d1d1d",
   fontFamily: "Permanent Marker" || "sans-serif",
   fontSize: "5vw",
 }

@@ -1,5 +1,7 @@
 import { SxProps } from "@mui/material"
 
+import liquidFill from "../../images/liquidFill.png"
+
 const gameHintsSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   cursor: "vertical-text",
@@ -17,7 +19,6 @@ const newGameButtonSX: SxProps = {
   width: "15rem",
   background: "transparent",
   padding: "1rem 2rem",
-  margin: "1rem",
   fontSize: "2rem",
   fontWeight: "600",
 
@@ -28,20 +29,18 @@ const newGameButtonSX: SxProps = {
   border: "solid 0.4vh",
   lineHeight: "4vh",
   cursor: "pointer",
-  color: "#302c2c",
+  color: "#1d1d1d",
   borderRightColor: "black",
   textShadow: "0 3px 5px rgba(#000, 0.25)",
-  backgroundImage:
-    "url(https://web.archive.org/web/20160312084140im_/http://splatoon.nintendo.com/assets/img/nav-bg-fill-blue.png?1443460871)",
+  backgroundImage: `url(${liquidFill})`,
   backgroundRepeat: "repeat-x",
   backgroundPosition: "0 -100%",
   transition: "1.25s ease",
-  filter: "brightness(0.5) saturate(0%)",
+  borderColor: "#1d1d1d",
 
   "&:hover": {
-    borderColor: "#302c2c",
     backgroundPosition: "500% 100%",
-    color: "rgb(255, 255, 255)",
+    color: "white",
     boxShadow: "2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)",
     transition: "1.25s ease",
   },
@@ -56,15 +55,11 @@ const rewindButtonSX: SxProps = {
   backgroundRepeat: "no-repeat",
   backgroundImage: `url(https://cdn-icons-png.flaticon.com/128/5542/5542182.png)`,
   zIndex: "100",
+  marginTop: "2vh",
 
   "&:hover": {
-    borderColor: "#302c2c",
+    borderColor: "#1d1d1d",
     boxShadow: "3px 6px 5px -6px hsla(0, 0%, 0%, 0.5)",
-  },
-
-  "&:active": {
-    backgroundPosition: "50% 50%",
-    transition: "0.3s",
   },
 
   "&:disabled": {
@@ -76,11 +71,40 @@ const actionButtonsGridSX: SxProps = {
   direction: "row",
   justifyContent: "center",
   alignItems: "center",
+  padding: "none",
 }
 
 const gridCenterSX: SxProps = {
   justifyContent: "center",
 }
+
+const newGameContainerSX: SxProps = {
+  marginTop: "1.4vh",
+  marginLeft: "1vh",
+}
+
+// const rewindDisabledProp = (
+//   rewindPauseOpen: boolean,
+//   gameStatePauseOpen: boolean,
+//   movesMadeLength: number
+// ): SxProps => {
+//   return {
+//     ...(rewindPauseOpen && { filter: "none !important" }),
+//     ...(gameStatePauseOpen && { filter: "none !important" }),
+//     ...(rewindPauseOpen &&
+//       movesMadeLength >= 1 && {
+//         outline: "5px dashed #555",
+//         borderRadius: "4vh",
+//         outlineColor: "white",
+//         transition: "0.2s",
+
+//         "&:hover": {
+//           transition: "0.2s",
+//           outlineColor: "transparent",
+//         },
+//       }),
+//   }
+// }
 
 export {
   gameHintsSX,
@@ -88,4 +112,5 @@ export {
   rewindButtonSX,
   actionButtonsGridSX,
   gridCenterSX,
+  newGameContainerSX,
 }

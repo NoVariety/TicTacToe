@@ -6,16 +6,19 @@ import {
   rewindButtonSX,
   actionButtonsGridSX,
   gridCenterSX,
+  newGameContainerSX,
 } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
+import Stack from "@mui/material/Stack"
 import { SxProps } from "@mui/material"
 
 import Board from "../board/board"
-import PauseScreenModal from "../pauseScreenModal/pauseScreenModal"
+import RewindPause from "../rewindPause/rewindPause"
+import GameStatePause from "../gameStatePause/gameStatePause"
 
 import { cellTypes, legalMoves, gameStateMessages } from "../../data.consts"
 import {
@@ -27,13 +30,14 @@ import {
   getRandomCoordinateObject,
 } from "../../utils/gameUtils"
 
-//! make state messages pop up more
-
 function Game() {
   const BOARD_LENGTH: number = 3
 
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
+  const [gameStateMessage, setGameStateMessage] = useState<gameStateMessages>(
+    gameStateMessages.GAME_ONGOING
+  )
   const [board, setBoard] = useState<cellTypes[][]>(
     createEmptyBoard(BOARD_LENGTH)
   )
@@ -96,7 +100,7 @@ function Game() {
   }
 
   function setWinnerMessage(winnerSign: cellTypes): void {
-    setHintsText(
+    setGameStateMessage(
       winnerSign === playerSign
         ? gameStateMessages.WIN_MESSAGE
         : gameStateMessages.LOSS_MESSAGE
@@ -209,7 +213,7 @@ function Game() {
   function isThereAWinner(): boolean {
     const isGameWon: boolean = checkSlashes() || checkRowsCols()
     if (!isGameWon && isBoardFull(legalMoves)) {
-      setHintsText(gameStateMessages.DRAW_MESSAGE)
+      setGameStateMessage(gameStateMessages.DRAW_MESSAGE)
     }
 
     return isGameWon
@@ -224,7 +228,9 @@ function Game() {
   }, [board])
 
   function startNewGame(): void {
+    handleGameStatePauseClose()
     setHintsText(getRandomHint())
+    setGameStateMessage(gameStateMessages.GAME_ONGOING)
 
     setBoard(createEmptyBoard(BOARD_LENGTH))
     tempBoard = board.map((arr) => arr.slice())
@@ -261,43 +267,76 @@ function Game() {
     setBoard(tempBoard)
 
     if (rewoundTurnSign !== playerSign) {
-      handlePauseModalOpen()
+      handleRewindPauseOpen()
     }
   }
 
-  const [pauseModalOpen, setPauseModalOpen] = useState(false)
-  const handlePauseModalOpen = () => setPauseModalOpen(true)
-  const handlePauseModalClose = () => {
-    setPauseModalOpen(false)
+  const [rewindPauseOpen, setRewindPauseOpen] = useState(false)
+  const handleRewindPauseOpen = () => setRewindPauseOpen(true)
+  const handleRewindPauseClose = () => {
+    setRewindPauseOpen(false)
 
     if (currentTurnSign !== playerSign && currentTurnSign !== cellTypes.EMPTY) {
       setComputerTurnToggle((prev) => !prev)
     }
   }
 
+  const [gameStatePauseOpen, setGameStatePauseOpen] = useState(false)
+  const handleGameStatePauseOpen = () => setGameStatePauseOpen(true)
+  const handleGameStatePauseClose = () => setGameStatePauseOpen(false)
+
+  useEffect(() => {
+    if (
+      gameStateMessage === gameStateMessages.DRAW_MESSAGE ||
+      gameStateMessage === gameStateMessages.WIN_MESSAGE ||
+      gameStateMessage === gameStateMessages.LOSS_MESSAGE
+    ) {
+      handleGameStatePauseOpen()
+    }
+  }, [gameStateMessage])
+
   function toggleOffRewind(): boolean {
     return (
       movesMade.length <= 0 ||
-      hintsText === gameStateMessages.DRAW_MESSAGE ||
-      hintsText === gameStateMessages.WIN_MESSAGE ||
-      hintsText === gameStateMessages.LOSS_MESSAGE
+      gameStateMessage === gameStateMessages.DRAW_MESSAGE ||
+      gameStateMessage === gameStateMessages.WIN_MESSAGE ||
+      gameStateMessage === gameStateMessages.LOSS_MESSAGE
     )
   }
 
   const rewindDisabledProp: SxProps = {
-    ...(pauseModalOpen && { filter: "none !important" }),
-    ...(pauseModalOpen &&
+    ...(rewindPauseOpen && { filter: "none !important" }),
+    ...(gameStatePauseOpen && { filter: "none !important" }),
+    ...(rewindPauseOpen &&
       movesMade.length >= 1 && {
         outline: "5px dashed #555",
         borderRadius: "4vh",
         outlineColor: "white",
-        transition: "0.5s",
+        transition: "0.2s",
 
         "&:hover": {
           transition: "0.2s",
           outlineColor: "transparent",
         },
       }),
+  } as const
+
+  const newGameEnableProp: SxProps = {
+    zIndex: "100",
+  }
+
+  const gameStateProp: SxProps = {
+    ...(gameStatePauseOpen && {
+      outline: "5px dashed #555",
+      outlineColor: "white",
+      zIndex: "100",
+      transition: "0.2s",
+
+      "&:hover": {
+        transition: "0.2s",
+        outlineColor: "transparent",
+      },
+    }),
   } as const
 
   return (
@@ -310,22 +349,41 @@ function Game() {
 
       <Board board={board} playTurn={playTurn} />
 
-      <PauseScreenModal
-        open={pauseModalOpen}
-        handleClose={handlePauseModalClose}
+      <RewindPause
+        open={rewindPauseOpen}
+        handleClose={handleRewindPauseClose}
         showRewindHint={movesMade.length > 0}
       />
 
-      <Grid container sx={actionButtonsGridSX}>
-        <Button
-          disabled={toggleOffRewind()}
-          onClick={rewindTurn}
-          sx={{ ...rewindButtonSX, p: rewindDisabledProp }}
-        ></Button>
+      <GameStatePause
+        open={gameStatePauseOpen}
+        handleClose={handleGameStatePauseClose}
+        showRewindHint={true}
+        mainText={gameStateMessage}
+      />
 
-        <Button onClick={startNewGame} sx={newGameButtonSX}>
-          NEW GAME
-        </Button>
+      <Grid container sx={actionButtonsGridSX}>
+        <Stack direction="row">
+          <Container disableGutters>
+            <Button
+              disabled={toggleOffRewind()}
+              onClick={rewindTurn}
+              sx={{ ...rewindButtonSX, p: rewindDisabledProp }}
+            ></Button>
+          </Container>
+
+          <Container
+            disableGutters
+            sx={{ ...newGameContainerSX, p: gameStateProp }}
+          >
+            <Button
+              onClick={startNewGame}
+              sx={{ ...newGameButtonSX, p: newGameEnableProp }}
+            >
+              NEW GAME
+            </Button>
+          </Container>
+        </Stack>
       </Grid>
     </Container>
   )
