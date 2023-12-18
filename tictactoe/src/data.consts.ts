@@ -30,9 +30,9 @@ const hintTextOptions: string[] = [
   "SO IN WAR, THE WAY IS TO AVOID WHAT IS STRONG, AND STRIKE AT WHAT IS WEAK",
 ]
 
-type legalMovesObj = {
+type legalMoves = {
   row: number
   col: number
 }
 
-export { cellTypes, hintTextOptions, type legalMovesObj }
+export { cellTypes, hintTextOptions, type legalMoves }

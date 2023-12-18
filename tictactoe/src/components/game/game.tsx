@@ -8,8 +8,9 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 
 import Board from "../board/board"
+import PauseScreenModal from "../pauseScreen/pauseScreenModal"
 
-import { cellTypes, legalMovesObj } from "../../data.consts"
+import { cellTypes, legalMoves } from "../../data.consts"
 import {
   getRandomPlayerSign,
   getRandomHint,
@@ -24,6 +25,10 @@ enum gameStateMessages {
   DRAW_MESSAGE = "IT'S A DRAW!",
   LOSS_MESSAGE = "YOU LOSE!",
 }
+
+//! make state messages pop up more
+//! enable new game through pause modal
+//! disable click ^ this thing on modal when button is disabled
 
 function Game() {
   const BOARD_LENGTH: number = 3
@@ -48,26 +53,26 @@ function Game() {
     doFirstComputerPlay()
   }, [newGameToggle])
 
-  const [legalMoves, setLegalMoves] = useState<Array<legalMovesObj>>(
+  const [legalMoves, setLegalMoves] = useState<Array<legalMoves>>(
     createLegalMoves(BOARD_LENGTH)
   )
-  const [movesMade, setMovesMade] = useState<Array<legalMovesObj>>([])
+  const [movesMade, setMovesMade] = useState<Array<legalMoves>>([])
 
   function changeCell(
     rowIndex: number,
     colIndex: number,
     playSign: cellTypes
   ): void {
-    const moveObj: legalMovesObj = { row: rowIndex, col: colIndex }
+    const move: legalMoves = { row: rowIndex, col: colIndex }
 
-    removeFromLegalMoves(moveObj)
-    setMovesMade((prev) => [...prev, moveObj])
+    removeFromLegalMoves(move)
+    setMovesMade((prev) => [...prev, move])
 
     tempBoard[rowIndex][colIndex] = playSign
     setBoard(tempBoard)
   }
 
-  function removeFromLegalMoves(movesObj: legalMovesObj): void {
+  function removeFromLegalMoves(movesObj: legalMoves): void {
     setLegalMoves((prev) =>
       prev.filter(
         (move) => move.col !== movesObj.col || move.row !== movesObj.row
@@ -84,10 +89,10 @@ function Game() {
       playerSign === cellTypes.FIRST_PLAYER
         ? cellTypes.SECOND_PLAYER
         : cellTypes.FIRST_PLAYER
-    const movesObj: legalMovesObj = getRandomCoordinateObject(legalMoves)
+    const moves: legalMoves = getRandomCoordinateObject(legalMoves)
 
     if (legalMoves.length > 0) {
-      changeCell(movesObj.row, movesObj.col, computerSign)
+      changeCell(moves.row, moves.col, computerSign)
     }
   }
 
@@ -99,6 +104,7 @@ function Game() {
     )
   }
 
+  //! check why i did this and if possible to improve it
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   useEffect(() => {
     if (!isFirstRender) {
@@ -117,6 +123,7 @@ function Game() {
 
         changeCell(rowIndex, colIndex, playerSign)
 
+        //! change isBoardFull func
         if (!isBoardFull(board) && !isThereAWinner()) {
           setComputerTurnToggle((prev) => !prev)
         }
@@ -210,14 +217,10 @@ function Game() {
     return isGameWon
   }
 
-  function calculateTotalMovesMade(): number {
-    return BOARD_LENGTH * BOARD_LENGTH - legalMoves.length
-  }
-
   useEffect(() => {
     const MINIMUM_MOVES_REQUIRED_TO_WIN: number = BOARD_LENGTH * 2 - 1
 
-    if (calculateTotalMovesMade() >= MINIMUM_MOVES_REQUIRED_TO_WIN) {
+    if (movesMade.length >= MINIMUM_MOVES_REQUIRED_TO_WIN) {
       isThereAWinner()
     }
   }, [board])
@@ -235,8 +238,8 @@ function Game() {
     setNewGameToggle((prev) => !prev)
   }
 
-  function popMovesMade(): legalMovesObj {
-    const moveObj: legalMovesObj = movesMade[movesMade.length - 1]
+  function popFromMovesMade(): legalMoves {
+    const moveObj: legalMoves = movesMade[movesMade.length - 1]
     setMovesMade((prev) =>
       prev.filter(
         (move) => move.col !== moveObj.col || move.row !== moveObj.row
@@ -245,17 +248,39 @@ function Game() {
     return moveObj
   }
 
+  const [currentTurnSign, setCurrentTurnSign] = useState<cellTypes>(
+    cellTypes.EMPTY
+  )
+
   function rewindTurn(): void {
-    const moveObj: legalMovesObj = popMovesMade()
+    const moveObj: legalMoves = popFromMovesMade()
     setLegalMoves((prev) => [...prev, moveObj])
+
+    const rewoundTurnSign = tempBoard[moveObj.row][moveObj.col]
+    setCurrentTurnSign(rewoundTurnSign)
 
     tempBoard[moveObj.row][moveObj.col] = cellTypes.EMPTY
     setBoard(tempBoard)
+
+    if (rewoundTurnSign !== playerSign) {
+      handlePauseModalOpen()
+    }
+  }
+
+  //! change pauseScreen component name to pauseScreenModal
+  const [pauseModalOpen, setPauseModalOpen] = useState(false)
+  const handlePauseModalOpen = () => setPauseModalOpen(true)
+  const handlePauseModalClose = () => {
+    setPauseModalOpen(false)
+
+    if (currentTurnSign !== playerSign && currentTurnSign !== cellTypes.EMPTY) {
+      setComputerTurnToggle((prev) => !prev)
+    }
   }
 
   function toggleOffRewind(): boolean {
     return (
-      !(movesMade.length > 0) ||
+      movesMade.length <= 0 ||
       hintsText === gameStateMessages.DRAW_MESSAGE ||
       hintsText === gameStateMessages.WIN_MESSAGE ||
       hintsText === gameStateMessages.LOSS_MESSAGE
@@ -263,33 +288,36 @@ function Game() {
   }
 
   return (
-    <Container className="board">
-      <Container className="board-main">
-        <Grid container justifyContent="center">
-          <Typography variant="h2" sx={gameHintsSX}>
-            {hintsText}
-          </Typography>
-        </Grid>
+    <Container>
+      <Grid container justifyContent="center">
+        <Typography variant="h2" sx={gameHintsSX}>
+          {hintsText}
+        </Typography>
+      </Grid>
 
-        <Board board={board} playTurn={playTurn} />
+      <Board board={board} playTurn={playTurn} />
 
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Button
-            disabled={toggleOffRewind()}
-            onClick={rewindTurn}
-            sx={rewindButtonSX}
-          ></Button>
+      <PauseScreenModal
+        open={pauseModalOpen}
+        handleClose={handlePauseModalClose}
+      />
 
-          <Button onClick={startNewGame} sx={newGameButtonSX}>
-            NEW GAME
-          </Button>
-        </Grid>
-      </Container>
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Button
+          disabled={toggleOffRewind()}
+          onClick={rewindTurn}
+          sx={rewindButtonSX}
+        ></Button>
+
+        <Button onClick={startNewGame} sx={newGameButtonSX}>
+          NEW GAME
+        </Button>
+      </Grid>
     </Container>
   )
 }

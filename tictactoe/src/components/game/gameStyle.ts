@@ -55,6 +55,7 @@ const rewindButtonSX: SxProps = {
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
   backgroundImage: `url(https://cdn-icons-png.flaticon.com/128/5542/5542182.png)`,
+  zIndex: "100",
 
   "&:hover": {
     borderColor: "#302c2c",

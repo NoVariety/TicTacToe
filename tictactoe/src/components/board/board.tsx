@@ -9,11 +9,13 @@ type Props = {
   playTurn: Function
 }
 
+//! change props - split them instead of using props.something
 function Board(props: Props) {
   return (
     <Grid
       container
       item
+      //! move sx into a dedicated file
       sx={{ alignItems: "center", justifyContent: "center" }}
     >
       {props.board.map((row, rowIndex) => (

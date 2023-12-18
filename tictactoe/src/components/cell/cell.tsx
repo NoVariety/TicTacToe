@@ -10,6 +10,7 @@ type Props = {
   playTurn: () => void
 }
 
+//! change props - split them instead of using props.something
 function Cell(props: Props) {
   return (
     <Grid item xs={0} sm={4} md={1} key={props.index}>
