@@ -2,6 +2,8 @@ import { SxProps } from "@mui/material"
 
 const containerSX: SxProps = {
   pointerEvents: "none",
+  outline: "none !important",
+  border: "none !important",
 }
 
 const modalSX: SxProps = {

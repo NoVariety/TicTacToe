@@ -1,5 +1,6 @@
 import { SxProps } from "@mui/material"
 
+//! combine
 const pauseTextSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   fontWeight: "600",
