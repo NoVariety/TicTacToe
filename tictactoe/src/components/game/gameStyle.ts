@@ -35,7 +35,7 @@ const newGameButtonSX: SxProps = {
   backgroundImage: `url(${liquidFill})`,
   backgroundRepeat: "repeat-x",
   backgroundPosition: "0 -100%",
-  transition: "1.25s ease",
+  transition: "0.5s ease",
   borderColor: "#1d1d1d",
 
   "&:hover": {

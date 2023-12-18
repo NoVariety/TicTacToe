@@ -22,4 +22,9 @@ const appTitleSX: SxProps = {
   marginTop: "3vh",
 }
 
-export { appTitleSX, appSX }
+const appGridSX: SxProps = {
+  height: "20vh",
+  justifyContent: "center",
+}
+
+export { appTitleSX, appGridSX, appSX }

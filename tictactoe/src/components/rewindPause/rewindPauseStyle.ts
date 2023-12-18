@@ -18,7 +18,7 @@ const pauseSubextSX: SxProps = {
   color: "white",
   textAlign: "center",
   marginTop: "37vh",
-  marginRight: "1.5vw",
+  marginRight: "1vh",
   textShadow:
     "-1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000",
   cursor: "default",

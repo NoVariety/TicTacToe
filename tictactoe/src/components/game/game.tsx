@@ -321,10 +321,6 @@ function Game() {
       }),
   } as const
 
-  const newGameEnableProp: SxProps = {
-    zIndex: "100",
-  }
-
   const gameStateProp: SxProps = {
     ...(gameStatePauseOpen && {
       outline: "5px dashed #555",
@@ -358,7 +354,6 @@ function Game() {
       <GameStatePause
         open={gameStatePauseOpen}
         handleClose={handleGameStatePauseClose}
-        showRewindHint={true}
         mainText={gameStateMessage}
       />
 
@@ -376,10 +371,7 @@ function Game() {
             disableGutters
             sx={{ ...newGameContainerSX, p: gameStateProp }}
           >
-            <Button
-              onClick={startNewGame}
-              sx={{ ...newGameButtonSX, p: newGameEnableProp }}
-            >
+            <Button onClick={startNewGame} sx={{ ...newGameButtonSX }}>
               NEW GAME
             </Button>
           </Container>
