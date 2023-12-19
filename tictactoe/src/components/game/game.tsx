@@ -28,6 +28,7 @@ import {
   isBoardFull,
   createLegalMoves,
   getRandomCoordinateObject,
+  isGameStillOngoing,
 } from "../../utils/gameUtils"
 
 function Game() {
@@ -99,6 +100,7 @@ function Game() {
     }
   }
 
+  //! move to utils
   function setWinnerMessage(winnerSign: cellTypes): void {
     setGameStateMessage(
       winnerSign === playerSign
@@ -107,7 +109,6 @@ function Game() {
     )
   }
 
-  //* prevents rendering twice or wrong turn on first render
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   useEffect(() => {
     if (!isFirstRender) {
@@ -133,6 +134,7 @@ function Game() {
     }
   }
 
+  //! move to utils
   function checkRowsCols(): boolean {
     const FIRST_CELL_INDEX: number = 0
 
@@ -172,6 +174,7 @@ function Game() {
     return false
   }
 
+  //! move to utils
   function checkSlashes(): boolean {
     let countSlashSign: number = 0
     let countReverseSlashSign: number = 0
@@ -210,6 +213,7 @@ function Game() {
     return false
   }
 
+  //! move to utils
   function isThereAWinner(): boolean {
     const isGameWon: boolean = checkSlashes() || checkRowsCols()
     if (!isGameWon && isBoardFull(legalMoves)) {
@@ -257,6 +261,7 @@ function Game() {
   )
 
   function rewindTurn(): void {
+    //! remove obj from name
     const moveObj: legalMoves = popFromMovesMade()
     setLegalMoves((prev) => [...prev, moveObj])
 
@@ -267,12 +272,11 @@ function Game() {
     setBoard(tempBoard)
 
     if (rewoundTurnSign !== playerSign) {
-      handleRewindPauseOpen()
+      setRewindPauseOpen(true)
     }
   }
 
   const [rewindPauseOpen, setRewindPauseOpen] = useState(false)
-  const handleRewindPauseOpen = () => setRewindPauseOpen(true)
   const handleRewindPauseClose = () => {
     setRewindPauseOpen(false)
 
@@ -282,28 +286,19 @@ function Game() {
   }
 
   const [gameStatePauseOpen, setGameStatePauseOpen] = useState(false)
-  const handleGameStatePauseOpen = () => setGameStatePauseOpen(true)
   const handleGameStatePauseClose = () => setGameStatePauseOpen(false)
 
   useEffect(() => {
-    if (
-      gameStateMessage === gameStateMessages.DRAW_MESSAGE ||
-      gameStateMessage === gameStateMessages.WIN_MESSAGE ||
-      gameStateMessage === gameStateMessages.LOSS_MESSAGE
-    ) {
-      handleGameStatePauseOpen()
+    if (isGameStillOngoing(gameStateMessage)) {
+      setGameStatePauseOpen(true)
     }
   }, [gameStateMessage])
 
   function toggleOffRewind(): boolean {
-    return (
-      movesMade.length <= 0 ||
-      gameStateMessage === gameStateMessages.DRAW_MESSAGE ||
-      gameStateMessage === gameStateMessages.WIN_MESSAGE ||
-      gameStateMessage === gameStateMessages.LOSS_MESSAGE
-    )
+    return movesMade.length <= 0 || isGameStillOngoing(gameStateMessage)
   }
 
+  //! try again to move to style
   const rewindDisabledProp: SxProps = {
     ...(rewindPauseOpen && { filter: "none !important" }),
     ...(gameStatePauseOpen && { filter: "none !important" }),
@@ -357,6 +352,7 @@ function Game() {
         mainText={gameStateMessage}
       />
 
+      {/* split to another component */}
       <Grid container sx={actionButtonsGridSX}>
         <Stack direction="row">
           <Container disableGutters>
@@ -371,7 +367,7 @@ function Game() {
             disableGutters
             sx={{ ...newGameContainerSX, p: gameStateProp }}
           >
-            <Button onClick={startNewGame} sx={{ ...newGameButtonSX }}>
+            <Button onClick={startNewGame} sx={newGameButtonSX}>
               NEW GAME
             </Button>
           </Container>

@@ -1,4 +1,9 @@
-import { cellTypes, hintTextOptions, legalMoves } from "../data.consts"
+import {
+  cellTypes,
+  gameStateMessages,
+  hintTextOptions,
+  legalMoves,
+} from "../data.consts"
 
 function getRandomPlayerSign(): cellTypes {
   return Math.random() < 0.5 ? cellTypes.FIRST_PLAYER : cellTypes.SECOND_PLAYER
@@ -34,6 +39,14 @@ function getRandomCoordinateObject(
   return legalMovesArr[Math.floor(Math.random() * legalMovesArr.length)]
 }
 
+function isGameStillOngoing(gameStateMessage: gameStateMessages): boolean {
+  return (
+    gameStateMessage === gameStateMessages.DRAW_MESSAGE ||
+    gameStateMessage === gameStateMessages.WIN_MESSAGE ||
+    gameStateMessage === gameStateMessages.LOSS_MESSAGE
+  )
+}
+
 export {
   getRandomPlayerSign,
   getRandomHint,
@@ -41,4 +54,5 @@ export {
   isBoardFull,
   createLegalMoves,
   getRandomCoordinateObject,
+  isGameStillOngoing,
 }

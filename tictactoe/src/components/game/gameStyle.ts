@@ -83,29 +83,6 @@ const newGameContainerSX: SxProps = {
   marginLeft: "1vh",
 }
 
-// const rewindDisabledProp = (
-//   rewindPauseOpen: boolean,
-//   gameStatePauseOpen: boolean,
-//   movesMadeLength: number
-// ): SxProps => {
-//   return {
-//     ...(rewindPauseOpen && { filter: "none !important" }),
-//     ...(gameStatePauseOpen && { filter: "none !important" }),
-//     ...(rewindPauseOpen &&
-//       movesMadeLength >= 1 && {
-//         outline: "5px dashed #555",
-//         borderRadius: "4vh",
-//         outlineColor: "white",
-//         transition: "0.2s",
-
-//         "&:hover": {
-//           transition: "0.2s",
-//           outlineColor: "transparent",
-//         },
-//       }),
-//   }
-// }
-
 export {
   gameHintsSX,
   newGameButtonSX,
