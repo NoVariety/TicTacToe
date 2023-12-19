@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material"
 
-import waitingGif from "../../images/bocchiWait.gif"
+import waitingGif from "../../images/bocchiWaitShort.gif"
 
 const gifPlayerSX: SxProps = {
   backgroundImage: `url(${waitingGif})`,
@@ -25,6 +25,4 @@ const waitingModalSX: SxProps = {
   border: "none !important",
 }
 
-const waitingTextSX: SxProps = {}
-
-export { gifPlayerSX, waitingTextSX, gifContainerSX, waitingModalSX }
+export { gifPlayerSX, gifContainerSX, waitingModalSX }
