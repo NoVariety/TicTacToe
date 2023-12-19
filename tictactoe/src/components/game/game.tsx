@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography"
 
 import Board from "../board/board"
 import GameAlterPanel from "../gameAlterPanel/gameAlterPanel"
+import WaitingScreen from "../waitingScreen/waitingScreen"
 
 import { cellTypes, legalMoves, gameStateMessages } from "../../data.consts"
 import {
@@ -24,6 +25,7 @@ import {
 
 function Game() {
   const BOARD_LENGTH: number = 3
+  const WAITING_TIME_MILLIS: number = 4900
 
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
@@ -41,7 +43,8 @@ function Game() {
   useEffect(() => {
     function doFirstComputerPlay(): void {
       if (playerSign !== cellTypes.FIRST_PLAYER) {
-        computerTurn()
+        const moves: legalMoves = getRandomCoordinateObject(legalMoves)
+        changeCell(moves.row, moves.col, cellTypes.FIRST_PLAYER)
       }
     }
 
@@ -87,11 +90,15 @@ function Game() {
     const moves: legalMoves = getRandomCoordinateObject(legalMoves)
 
     if (legalMoves.length > 0) {
-      changeCell(moves.row, moves.col, computerSign)
+      setPauseScreenOpen(true)
+      setTimeout(() => {
+        changeCell(moves.row, moves.col, computerSign)
+
+        setPauseScreenOpen(false)
+      }, WAITING_TIME_MILLIS)
     }
   }
 
-  //! move to utils - no
   function setWinnerMessage(winnerSign: cellTypes): void {
     setGameStateMessage(
       winnerSign === playerSign
@@ -110,6 +117,8 @@ function Game() {
     }
   }, [computerTurnToggle])
 
+  const [pauseScreenOpen, setPauseScreenOpen] = useState(false)
+
   function playTurn(rowIndex: number, colIndex: number): void {
     if (!isBoardFull(legalMoves) && !isThereAWinner()) {
       if (tempBoard[rowIndex][colIndex] !== cellTypes.EMPTY) {
@@ -126,7 +135,6 @@ function Game() {
     }
   }
 
-  //! move to utils - no
   function isThereAWinner(): boolean {
     const isGameWon: boolean =
       checkSlashes(BOARD_LENGTH, tempBoard, setWinnerMessage) ||
@@ -228,6 +236,8 @@ function Game() {
         handleGameStatePauseClose={handleGameStatePauseClose}
         rewindTurn={rewindTurn}
       />
+
+      <WaitingScreen open={pauseScreenOpen} />
     </Container>
   )
 }
