@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react"
 
-import {
-  gameHintsSX,
-  newGameButtonSX,
-  rewindButtonSX,
-  actionButtonsGridSX,
-  gridCenterSX,
-  newGameContainerSX,
-} from "./gameStyle"
+import { gameHintsSX, gridCenterSX } from "./gameStyle"
 
 import Grid from "@mui/material/Grid"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
-import Button from "@mui/material/Button"
-import Stack from "@mui/material/Stack"
-import { SxProps } from "@mui/material"
 
 import Board from "../board/board"
-import RewindPause from "../rewindPause/rewindPause"
-import GameStatePause from "../gameStatePause/gameStatePause"
+import GameAlterPanel from "../gameAlterPanel/gameAlterPanel"
 
 import { cellTypes, legalMoves, gameStateMessages } from "../../data.consts"
 import {
@@ -28,6 +17,8 @@ import {
   isBoardFull,
   createLegalMoves,
   getRandomCoordinateObject,
+  checkRowsCols,
+  checkSlashes,
   isGameStillOngoing,
 } from "../../utils/gameUtils"
 
@@ -76,10 +67,10 @@ function Game() {
     setBoard(tempBoard)
   }
 
-  function removeFromLegalMoves(movesObj: legalMoves): void {
+  function removeFromLegalMoves(move: legalMoves): void {
     setLegalMoves((prev) =>
       prev.filter(
-        (move) => move.col !== movesObj.col || move.row !== movesObj.row
+        (legalMove) => legalMove.col !== move.col || legalMove.row !== move.row
       )
     )
   }
@@ -100,7 +91,7 @@ function Game() {
     }
   }
 
-  //! move to utils
+  //! move to utils - no
   function setWinnerMessage(winnerSign: cellTypes): void {
     setGameStateMessage(
       winnerSign === playerSign
@@ -110,6 +101,7 @@ function Game() {
   }
 
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+
   useEffect(() => {
     if (!isFirstRender) {
       computerTurn()
@@ -134,88 +126,11 @@ function Game() {
     }
   }
 
-  //! move to utils
-  function checkRowsCols(): boolean {
-    const FIRST_CELL_INDEX: number = 0
-
-    let countSameRowSign: number = 0
-    let countSameColSign: number = 0
-
-    for (
-      let initialIndex: number = 0;
-      initialIndex < BOARD_LENGTH;
-      initialIndex++
-    ) {
-      const rowSign: cellTypes = tempBoard[initialIndex][FIRST_CELL_INDEX]
-      const colSign: cellTypes = tempBoard[FIRST_CELL_INDEX][initialIndex]
-
-      for (let runIndex: number = 0; runIndex < BOARD_LENGTH; runIndex++) {
-        if (tempBoard[initialIndex][runIndex] === rowSign) {
-          countSameRowSign++
-        }
-        if (tempBoard[runIndex][initialIndex] === colSign) {
-          countSameColSign++
-        }
-      }
-
-      if (countSameRowSign === BOARD_LENGTH && rowSign !== cellTypes.EMPTY) {
-        setWinnerMessage(rowSign)
-        return true
-      }
-      if (countSameColSign === BOARD_LENGTH && colSign !== cellTypes.EMPTY) {
-        setWinnerMessage(colSign)
-        return true
-      }
-
-      countSameRowSign = 0
-      countSameColSign = 0
-    }
-
-    return false
-  }
-
-  //! move to utils
-  function checkSlashes(): boolean {
-    let countSlashSign: number = 0
-    let countReverseSlashSign: number = 0
-
-    const slashSign: cellTypes = tempBoard[0][0]
-    const reverseSlashSign: cellTypes = tempBoard[BOARD_LENGTH - 1][0]
-
-    let reverseIndex: number = BOARD_LENGTH - 1
-
-    for (
-      let rowColIndex: number = 0;
-      rowColIndex < BOARD_LENGTH;
-      rowColIndex++
-    ) {
-      if (tempBoard[rowColIndex][rowColIndex] === slashSign) {
-        countSlashSign++
-      }
-      if (tempBoard[rowColIndex][reverseIndex] === reverseSlashSign) {
-        countReverseSlashSign++
-      }
-      reverseIndex--
-    }
-
-    if (countSlashSign === BOARD_LENGTH && slashSign !== cellTypes.EMPTY) {
-      setWinnerMessage(slashSign)
-      return true
-    }
-    if (
-      countReverseSlashSign === BOARD_LENGTH &&
-      reverseSlashSign !== cellTypes.EMPTY
-    ) {
-      setWinnerMessage(reverseSlashSign)
-      return true
-    }
-
-    return false
-  }
-
-  //! move to utils
+  //! move to utils - no
   function isThereAWinner(): boolean {
-    const isGameWon: boolean = checkSlashes() || checkRowsCols()
+    const isGameWon: boolean =
+      checkSlashes(BOARD_LENGTH, tempBoard, setWinnerMessage) ||
+      checkRowsCols(BOARD_LENGTH, tempBoard, setWinnerMessage)
     if (!isGameWon && isBoardFull(legalMoves)) {
       setGameStateMessage(gameStateMessages.DRAW_MESSAGE)
     }
@@ -231,50 +146,9 @@ function Game() {
     }
   }, [board])
 
-  function startNewGame(): void {
-    handleGameStatePauseClose()
-    setHintsText(getRandomHint())
-    setGameStateMessage(gameStateMessages.GAME_ONGOING)
-
-    setBoard(createEmptyBoard(BOARD_LENGTH))
-    tempBoard = board.map((arr) => arr.slice())
-
-    setLegalMoves(createLegalMoves(BOARD_LENGTH))
-    setMovesMade([])
-
-    setPlayerSign(getRandomPlayerSign())
-    setNewGameToggle((prev) => !prev)
-  }
-
-  function popFromMovesMade(): legalMoves {
-    const moveObj: legalMoves = movesMade[movesMade.length - 1]
-    setMovesMade((prev) =>
-      prev.filter(
-        (move) => move.col !== moveObj.col || move.row !== moveObj.row
-      )
-    )
-    return moveObj
-  }
-
   const [currentTurnSign, setCurrentTurnSign] = useState<cellTypes>(
     cellTypes.EMPTY
   )
-
-  function rewindTurn(): void {
-    //! remove obj from name
-    const moveObj: legalMoves = popFromMovesMade()
-    setLegalMoves((prev) => [...prev, moveObj])
-
-    const rewoundTurnSign = tempBoard[moveObj.row][moveObj.col]
-    setCurrentTurnSign(rewoundTurnSign)
-
-    tempBoard[moveObj.row][moveObj.col] = cellTypes.EMPTY
-    setBoard(tempBoard)
-
-    if (rewoundTurnSign !== playerSign) {
-      setRewindPauseOpen(true)
-    }
-  }
 
   const [rewindPauseOpen, setRewindPauseOpen] = useState(false)
   const handleRewindPauseClose = () => {
@@ -294,41 +168,45 @@ function Game() {
     }
   }, [gameStateMessage])
 
-  function toggleOffRewind(): boolean {
-    return movesMade.length <= 0 || isGameStillOngoing(gameStateMessage)
+  function startNewGame(): void {
+    handleGameStatePauseClose()
+    setHintsText(getRandomHint())
+    setGameStateMessage(gameStateMessages.GAME_ONGOING)
+
+    setBoard(createEmptyBoard(BOARD_LENGTH))
+    tempBoard = board.map((arr) => arr.slice())
+
+    setLegalMoves(createLegalMoves(BOARD_LENGTH))
+    setMovesMade([])
+
+    setPlayerSign(getRandomPlayerSign())
+    setNewGameToggle((prev) => !prev)
   }
 
-  //! try again to move to style
-  const rewindDisabledProp: SxProps = {
-    ...(rewindPauseOpen && { filter: "none !important" }),
-    ...(gameStatePauseOpen && { filter: "none !important" }),
-    ...(rewindPauseOpen &&
-      movesMade.length >= 1 && {
-        outline: "5px dashed #555",
-        borderRadius: "4vh",
-        outlineColor: "white",
-        transition: "0.2s",
+  function popFromMovesMade(): legalMoves {
+    const move: legalMoves = movesMade[movesMade.length - 1]
+    setMovesMade((prev) =>
+      prev.filter(
+        (moveMade) => moveMade.col !== move.col || moveMade.row !== move.row
+      )
+    )
+    return move
+  }
 
-        "&:hover": {
-          transition: "0.2s",
-          outlineColor: "transparent",
-        },
-      }),
-  } as const
+  function rewindTurn(): void {
+    const move: legalMoves = popFromMovesMade()
+    setLegalMoves((prev) => [...prev, move])
 
-  const gameStateProp: SxProps = {
-    ...(gameStatePauseOpen && {
-      outline: "5px dashed #555",
-      outlineColor: "white",
-      zIndex: "100",
-      transition: "0.2s",
+    const rewoundTurnSign = tempBoard[move.row][move.col]
+    setCurrentTurnSign(rewoundTurnSign)
 
-      "&:hover": {
-        transition: "0.2s",
-        outlineColor: "transparent",
-      },
-    }),
-  } as const
+    tempBoard[move.row][move.col] = cellTypes.EMPTY
+    setBoard(tempBoard)
+
+    if (rewoundTurnSign !== playerSign) {
+      setRewindPauseOpen(true)
+    }
+  }
 
   return (
     <Container>
@@ -340,39 +218,16 @@ function Game() {
 
       <Board board={board} playTurn={playTurn} />
 
-      <RewindPause
-        open={rewindPauseOpen}
-        handleClose={handleRewindPauseClose}
-        showRewindHint={movesMade.length > 0}
+      <GameAlterPanel
+        movesMade={movesMade}
+        gameStateMessage={gameStateMessage}
+        rewindPauseOpen={rewindPauseOpen}
+        gameStatePauseOpen={gameStatePauseOpen}
+        startNewGame={startNewGame}
+        handleRewindPauseClose={handleRewindPauseClose}
+        handleGameStatePauseClose={handleGameStatePauseClose}
+        rewindTurn={rewindTurn}
       />
-
-      <GameStatePause
-        open={gameStatePauseOpen}
-        handleClose={handleGameStatePauseClose}
-        mainText={gameStateMessage}
-      />
-
-      {/* split to another component */}
-      <Grid container sx={actionButtonsGridSX}>
-        <Stack direction="row">
-          <Container disableGutters>
-            <Button
-              disabled={toggleOffRewind()}
-              onClick={rewindTurn}
-              sx={{ ...rewindButtonSX, p: rewindDisabledProp }}
-            ></Button>
-          </Container>
-
-          <Container
-            disableGutters
-            sx={{ ...newGameContainerSX, p: gameStateProp }}
-          >
-            <Button onClick={startNewGame} sx={newGameButtonSX}>
-              NEW GAME
-            </Button>
-          </Container>
-        </Stack>
-      </Grid>
     </Container>
   )
 }
