@@ -13,16 +13,9 @@ const pauseTextSX: SxProps = {
 }
 
 const pauseSubextSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
-  color: "white",
-  textAlign: "center",
+  ...pauseTextSX,
   marginTop: "37vh",
   marginRight: "1vh",
-  textShadow:
-    "-1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000",
-  cursor: "default",
-  pointerEvents: "none",
 }
 
 export { pauseTextSX, pauseSubextSX }

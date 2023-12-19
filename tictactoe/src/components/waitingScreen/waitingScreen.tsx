@@ -12,6 +12,7 @@ import {
 import { SxProps } from "@mui/material"
 
 import waitingGif from "../../images/bocchiWaitShort.gif"
+import LoadingDots from "../loadingDots/loadingDots"
 
 type props = {
   open: boolean
@@ -26,6 +27,7 @@ export default function WaitingScreen({ open }: props) {
             { ...gifPlayerSX, backgroundImage: `url(${waitingGif})` } as SxProps
           }
         ></Container>
+        <LoadingDots />
       </Container>
     </Modal>
   )

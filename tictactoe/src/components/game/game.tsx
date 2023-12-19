@@ -91,11 +91,14 @@ function Game() {
 
     if (legalMoves.length > 0) {
       setPauseScreenOpen(true)
-      setTimeout(() => {
-        changeCell(moves.row, moves.col, computerSign)
+      setTimeout(
+        () => {
+          changeCell(moves.row, moves.col, computerSign)
 
-        setPauseScreenOpen(false)
-      }, WAITING_TIME_MILLIS)
+          setPauseScreenOpen(false)
+        },
+        legalMoves.length !== 1 ? WAITING_TIME_MILLIS : 0
+      )
     }
   }
 

@@ -1,6 +1,5 @@
 import { SxProps } from "@mui/material"
 
-//! combine
 const pauseTextSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   fontWeight: "600",
@@ -14,15 +13,8 @@ const pauseTextSX: SxProps = {
 }
 
 const pauseSubextSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
-  color: "white",
-  textAlign: "center",
+  ...pauseTextSX,
   marginTop: "38vh",
-  textShadow:
-    "-1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000",
-  cursor: "default",
-  pointerEvents: "none",
 }
 
 export { pauseTextSX, pauseSubextSX }
