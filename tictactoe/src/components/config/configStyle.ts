@@ -5,6 +5,8 @@ import backImage from "../../images/backImageColoerd.png"
 const BUTTON_LEFT_DISTANCE: number = 39.5
 const BUTTON_BOTTOM_DISTANCE: number = 1.5
 
+//! change positions from absolute to keep the design consistent on smaller screens
+
 const pauseSubTextSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   fontWeight: "600",

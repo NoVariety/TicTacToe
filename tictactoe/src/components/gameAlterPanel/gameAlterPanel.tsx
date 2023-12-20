@@ -60,27 +60,19 @@ export default function GameAlterPanel({
             <Button
               disabled={toggleOffRewind(movesMade.length, gameStateMessage)}
               onClick={rewindTurn}
-              sx={
-                {
-                  ...rewindButtonSX,
-                  ...getRewindDisabledProps(
-                    gameStatePauseOpen,
-                    rewindPauseOpen,
-                    movesMade.length
-                  ),
-                } as SxProps
-              }
+              sx={{
+                ...getRewindDisabledProps(
+                  gameStatePauseOpen,
+                  rewindPauseOpen,
+                  movesMade.length
+                ),
+              }}
             ></Button>
           </Container>
 
           <Container
             disableGutters
-            sx={
-              {
-                ...newGameContainerSX,
-                ...getGameStateProps(gameStatePauseOpen),
-              } as SxProps
-            }
+            sx={{ ...getGameStateProps(gameStatePauseOpen) }}
           >
             <Button onClick={startNewGame} sx={newGameButtonSX}>
               NEW GAME

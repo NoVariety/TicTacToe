@@ -69,6 +69,7 @@ const actionButtonsGridSX: SxProps = {
 
 function getGameStateProps(gameStatePauseOpen: boolean): SxProps {
   return {
+    ...newGameContainerSX,
     ...(gameStatePauseOpen && {
       outline: "5px dashed #555",
       outlineColor: "white",
@@ -89,6 +90,7 @@ function getRewindDisabledProps(
   movesMadeLength: number
 ): SxProps {
   return {
+    ...rewindButtonSX,
     ...(rewindPauseOpen && { filter: "none !important" }),
     ...(gameStatePauseOpen && { filter: "none !important" }),
     ...(rewindPauseOpen &&
@@ -103,7 +105,7 @@ function getRewindDisabledProps(
           outlineColor: "transparent",
         },
       }),
-  }
+  } as SxProps
 }
 
 export {

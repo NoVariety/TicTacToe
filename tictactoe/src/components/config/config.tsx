@@ -1,10 +1,7 @@
 import { useState } from "react"
-import background from "../../images/configBG.png"
 
 import {
-  pauseSubTextSX,
   configContainerSX,
-  configureButtonSX,
   getPauseSubTextToggleSX,
   getConfigureButtonToggleSX,
 } from "./configStyle"
@@ -14,7 +11,6 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import Modal from "@mui/material/Modal"
 import Slide from "@mui/material/Slide"
-import { SxProps } from "@mui/material"
 
 export default function Config() {
   const ANCHOR = "left"
