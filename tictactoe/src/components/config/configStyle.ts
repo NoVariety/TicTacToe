@@ -8,6 +8,7 @@ const BUTTON_BOTTOM_DISTANCE: number = 1.5
 const pauseSubTextSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   fontWeight: "600",
+  fontSize: "3vh",
   color: "white",
   textAlign: "center",
   textShadow:
@@ -17,7 +18,7 @@ const pauseSubTextSX: SxProps = {
   pointerEvents: "none",
   position: "absolute",
   bottom: `${BUTTON_BOTTOM_DISTANCE}vh`,
-  left: `${BUTTON_LEFT_DISTANCE + 9}vh`,
+  left: `${BUTTON_LEFT_DISTANCE + 6.5}vh`,
   transition: "0.2s",
 }
 
@@ -40,8 +41,8 @@ const configContainerSX: SxProps = {
 
 const configureButtonSX: SxProps = {
   cursor: "pointer",
-  height: "7vh",
-  width: "7vh",
+  height: "5.5vh",
+  width: "5.5vh",
   borderRadius: "45%",
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
@@ -67,9 +68,9 @@ function getPauseSubTextToggleSX(drawerOpen: boolean): SxProps {
     ...(!drawerOpen && {
       color: "#1d1d1d",
       textShadow: "none",
-      fontSize: "3.5vh",
+      fontSize: "3vh",
       fontWeight: "bold",
-      left: `${10}vh`,
+      left: `${8}vh`,
       transition: "0.2s",
     }),
   }
@@ -85,7 +86,7 @@ function getConfigureButtonToggleSX(drawerOpen: boolean): SxProps {
       zIndex: "10000",
       outline: "4px dashed #555",
       borderRadius: "4vh",
-      outlineColor: "white",
+      outlineColor: "#eeeeee",
       transition: "0.2s",
 
       "&:hover": {
