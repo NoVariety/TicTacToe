@@ -42,4 +42,13 @@ enum gameStateMessages {
   GAME_ONGOING = "",
 }
 
-export { cellTypes, hintTextOptions, type legalMoves, gameStateMessages }
+// const WAITING_TIME_MILLIS: number = 3000
+const WAITING_TIME_MILLIS: number = 4900
+
+export {
+  cellTypes,
+  hintTextOptions,
+  type legalMoves,
+  gameStateMessages,
+  WAITING_TIME_MILLIS,
+}

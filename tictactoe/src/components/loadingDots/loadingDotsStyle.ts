@@ -1,5 +1,9 @@
 import { SxProps } from "@mui/material"
 
+const stackMarginSX: SxProps = {
+  marginLeft: "0.8vh",
+}
+
 const loadingDotsSX: SxProps = {
   position: "relative",
   left: "-9999px",
@@ -156,6 +160,7 @@ const loadingDotsEighthSX: SxProps = {
 }
 
 export {
+  stackMarginSX,
   loadingDotsSX,
   loadingDotsSecondSX,
   loadingDotsThirdSX,

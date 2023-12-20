@@ -1,10 +1,11 @@
-import { appTitleSX, appGridSX, appSX } from "./AppStyle"
+import { appTitleSX, bottomTextSX, appGridSX, appSX } from "./AppStyle"
 
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
+import Container from "@mui/material/Container"
 
 import Game from "./components/game/game"
-import { Container } from "@mui/material"
+import Config from "./components/config/config"
 
 function App() {
   return (
@@ -15,6 +16,10 @@ function App() {
         </Typography>
       </Grid>
       <Game />
+      <Config />
+      <Typography variant="body1" sx={bottomTextSX}>
+        nova corp. © no rights reserved
+      </Typography>
     </Container>
   )
 }

@@ -9,8 +9,14 @@ import Typography from "@mui/material/Typography"
 import Board from "../board/board"
 import GameAlterPanel from "../gameAlterPanel/gameAlterPanel"
 import WaitingScreen from "../waitingScreen/waitingScreen"
+import Config from "../config/config"
 
-import { cellTypes, legalMoves, gameStateMessages } from "../../data.consts"
+import {
+  cellTypes,
+  legalMoves,
+  gameStateMessages,
+  WAITING_TIME_MILLIS,
+} from "../../data.consts"
 import {
   getRandomPlayerSign,
   getRandomHint,
@@ -24,8 +30,7 @@ import {
 } from "../../utils/gameUtils"
 
 function Game() {
-  const BOARD_LENGTH: number = 3
-  const WAITING_TIME_MILLIS: number = 4900
+  let BOARD_LENGTH: number = 3
 
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
@@ -239,7 +244,6 @@ function Game() {
         handleGameStatePauseClose={handleGameStatePauseClose}
         rewindTurn={rewindTurn}
       />
-
       <WaitingScreen open={pauseScreenOpen} />
     </Container>
   )

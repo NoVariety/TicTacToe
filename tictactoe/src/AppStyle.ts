@@ -22,9 +22,21 @@ const appTitleSX: SxProps = {
   marginTop: "3vh",
 }
 
+const bottomTextSX: SxProps = {
+  fontSize: "2vh",
+  cursor: "vertical-text",
+  fontFamily: "Caveat" || "sans-serif",
+  wordWrap: "break-word",
+  fontWeight: "600",
+  position: "absolute",
+  right: "1vh",
+  bottom: "0vh",
+  pointerEvents: "none",
+}
+
 const appGridSX: SxProps = {
   height: "20vh",
   justifyContent: "center",
 }
 
-export { appTitleSX, appGridSX, appSX }
+export { appTitleSX, bottomTextSX, appGridSX, appSX }
