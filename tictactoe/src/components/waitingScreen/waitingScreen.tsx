@@ -9,16 +9,19 @@ import {
 
 import LoadingDots from "../loadingDots/loadingDots"
 
+import { waitingTimeGifMillis } from "../../data.consts"
+
 type props = {
   open: boolean
+  waitingTime: waitingTimeGifMillis
 }
 
-export default function WaitingScreen({ open }: props) {
+export default function WaitingScreen({ open, waitingTime }: props) {
   return (
     <Modal open={open} sx={waitingModalSX}>
       <Container sx={gifContainerSX}>
         <Container sx={gifPlayerSX}></Container>
-        <LoadingDots />
+        <LoadingDots waitingTime={waitingTime} />
       </Container>
     </Modal>
   )

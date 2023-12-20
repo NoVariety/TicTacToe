@@ -13,8 +13,6 @@ import Modal from "@mui/material/Modal"
 import Slide from "@mui/material/Slide"
 
 export default function Config() {
-  const ANCHOR = "left"
-
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
   return (

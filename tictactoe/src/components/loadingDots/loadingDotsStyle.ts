@@ -61,6 +61,25 @@ const loadingDotsSX: SxProps = {
   },
 }
 
+function createLoadingDotsSX(
+  beforeTimestamp: number,
+  afterTimestamp: number
+): SxProps {
+  return {
+    ...loadingDotsSX,
+    "&::before": {
+      boxShadow: "9984px 0 0 -5px",
+      animation: "dotPulseBefore 1.5s",
+      animationDelay: `${beforeTimestamp}s`,
+    },
+    "&::after": {
+      boxShadow: "10014px 0 0 -5px",
+      animation: "dotPulseAfter 1.5s",
+      animationDelay: `${afterTimestamp}s`,
+    },
+  }
+}
+
 const loadingDotsSecondSX: SxProps = {
   ...loadingDotsSX,
   "&::before": {
@@ -162,6 +181,7 @@ const loadingDotsEighthSX: SxProps = {
 export {
   stackMarginSX,
   loadingDotsSX,
+  createLoadingDotsSX,
   loadingDotsSecondSX,
   loadingDotsThirdSX,
   loadingDotsFourthSX,

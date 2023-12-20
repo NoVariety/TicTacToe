@@ -42,13 +42,17 @@ enum gameStateMessages {
   GAME_ONGOING = "",
 }
 
-// const WAITING_TIME_MILLIS: number = 3000
-const WAITING_TIME_MILLIS: number = 4900
+enum waitingTimeGifMillis {
+  off = 0,
+  short = 1000,
+  normal = 3000,
+  long = 4900,
+}
 
 export {
   cellTypes,
   hintTextOptions,
   type legalMoves,
   gameStateMessages,
-  WAITING_TIME_MILLIS,
+  waitingTimeGifMillis,
 }

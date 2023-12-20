@@ -1,6 +1,7 @@
 import { SxProps } from "@mui/material"
 
 import waitingGif from "../../images/bocchiWaitShort.gif"
+import waitingGif2 from "../../images/bocchiWalk.gif"
 
 const gifPlayerSX: SxProps = {
   backgroundImage: `url(${waitingGif})`,

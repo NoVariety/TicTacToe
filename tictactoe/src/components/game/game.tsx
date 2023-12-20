@@ -15,7 +15,7 @@ import {
   cellTypes,
   legalMoves,
   gameStateMessages,
-  WAITING_TIME_MILLIS,
+  waitingTimeGifMillis,
 } from "../../data.consts"
 import {
   getRandomPlayerSign,
@@ -102,7 +102,7 @@ function Game() {
 
           setPauseScreenOpen(false)
         },
-        legalMoves.length !== 1 ? WAITING_TIME_MILLIS : 0
+        legalMoves.length !== 1 ? waitingTimeGifMillis.long : 0
       )
     }
   }
@@ -244,7 +244,10 @@ function Game() {
         handleGameStatePauseClose={handleGameStatePauseClose}
         rewindTurn={rewindTurn}
       />
-      <WaitingScreen open={pauseScreenOpen} />
+      <WaitingScreen
+        open={pauseScreenOpen}
+        waitingTime={waitingTimeGifMillis.long}
+      />
     </Container>
   )
 }
