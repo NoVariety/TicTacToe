@@ -97,19 +97,7 @@ export default function Game({ boardLength, waitingTime }: props) {
         : cellTypes.FIRST_PLAYER
     const moves: legalMoves = getRandomCoordinateObject(legalMoves)
 
-    if (legalMoves.length > 0) {
-      if (waitingTime !== gifWaitingTimeMillis.off && legalMoves.length !== 1) {
-        setPauseScreenOpen(true)
-
-        setTimeout(() => {
-          changeCell(moves.row, moves.col, computerSign)
-
-          setPauseScreenOpen(false)
-        }, waitingTime)
-      } else {
-        changeCell(moves.row, moves.col, computerSign)
-      }
-    }
+    changeCell(moves.row, moves.col, computerSign)
   }
 
   function setWinnerMessage(winnerSign: cellTypes): void {
@@ -124,7 +112,22 @@ export default function Game({ boardLength, waitingTime }: props) {
 
   useEffect(() => {
     if (!isFirstRender) {
-      computerTurn()
+      if (legalMoves.length > 0) {
+        if (
+          waitingTime !== gifWaitingTimeMillis.off &&
+          legalMoves.length !== 1
+        ) {
+          setPauseScreenOpen(true)
+
+          setTimeout(() => {
+            computerTurn()
+
+            setPauseScreenOpen(false)
+          }, waitingTime)
+        } else {
+          computerTurn()
+        }
+      }
     } else {
       setIsFirstRender(false)
     }

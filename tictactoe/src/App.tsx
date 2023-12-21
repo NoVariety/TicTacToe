@@ -17,6 +17,8 @@ export default function App() {
   const [waitingTime, setWaitingTime] = useState<gifWaitingTimeMillis>(
     gifWaitingTimeMillis.mid
   )
+  const [tempWaitingTime, setTempWaitingTime] =
+    useState<gifWaitingTimeMillis>(waitingTime)
 
   return (
     <Container sx={appSX}>
@@ -33,6 +35,8 @@ export default function App() {
         setBoardLength={setBoardLength}
         waitingTime={waitingTime}
         setWaitingTime={setWaitingTime}
+        tempWaitingTime={tempWaitingTime}
+        setTempWaitingTime={setTempWaitingTime}
       />
 
       <Link
