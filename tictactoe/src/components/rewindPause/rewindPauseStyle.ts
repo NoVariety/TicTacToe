@@ -3,7 +3,7 @@ import { SxProps } from "@mui/material"
 const pauseTextSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
   fontWeight: "600",
-  color: "white",
+  color: "#eeeeee",
   textAlign: "center",
   marginTop: "44vh",
   textShadow:

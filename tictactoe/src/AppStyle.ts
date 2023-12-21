@@ -12,26 +12,27 @@ const appSX: SxProps = {
 }
 
 const appTitleSX: SxProps = {
-  fontSize: "10vh",
-  cursor: "vertical-text",
   fontFamily: "Caveat" || "sans-serif",
+  fontSize: "10vh",
   marginBottom: "2rem",
   textAlign: "center",
   wordWrap: "break-word",
   fontWeight: "700",
   marginTop: "3vh",
+  userSelect: "none",
 }
 
 const bottomTextSX: SxProps = {
-  fontSize: "2vh",
-  cursor: "vertical-text",
   fontFamily: "Caveat" || "sans-serif",
+  fontSize: "2.5vh",
+  cursor: "pointer",
   wordWrap: "break-word",
   fontWeight: "600",
   position: "absolute",
   right: "1vh",
   bottom: "0vh",
-  pointerEvents: "none",
+  color: "#1d1d1d",
+  userSelect: "none",
 }
 
 const appGridSX: SxProps = {

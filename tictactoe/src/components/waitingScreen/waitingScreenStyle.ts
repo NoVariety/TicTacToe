@@ -1,10 +1,13 @@
 import { SxProps } from "@mui/material"
 
-import waitingGif from "../../images/bocchiWaitShort.gif"
-import waitingGif2 from "../../images/bocchiWalk.gif"
+import { gifWaitingTimeMillis } from "../../data.consts"
+
+import waitingGifShort from "../../images/bocchiWalk.gif"
+import waitingGifAverage from "../../images/bocchiTrash.gif"
+import waitingGifLong from "../../images/bocchiWait.gif"
 
 const gifPlayerSX: SxProps = {
-  backgroundImage: `url(${waitingGif})`,
+  backgroundImage: `url(${waitingGifShort})`,
   backgroundRepeat: "no-repeat",
   width: "100%",
   height: "100%",
@@ -26,4 +29,16 @@ const waitingModalSX: SxProps = {
   border: "none !important",
 }
 
-export { gifPlayerSX, gifContainerSX, waitingModalSX }
+function getGifPlayerSX(waitingTime: gifWaitingTimeMillis): SxProps {
+  return {
+    ...gifPlayerSX,
+    ...(waitingTime === gifWaitingTimeMillis.mid && {
+      backgroundImage: `url(${waitingGifAverage})`,
+    }),
+    ...(waitingTime === gifWaitingTimeMillis.max && {
+      backgroundImage: `url(${waitingGifLong})`,
+    }),
+  }
+}
+
+export { gifPlayerSX, gifContainerSX, waitingModalSX, getGifPlayerSX }

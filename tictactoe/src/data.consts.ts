@@ -1,3 +1,5 @@
+const githubLink: string = "https://github.com/NoVariety/TicTacToe"
+
 const enum cellTypes {
   EMPTY = "",
   FIRST_PLAYER = "x",
@@ -42,17 +44,18 @@ enum gameStateMessages {
   GAME_ONGOING = "",
 }
 
-enum waitingTimeGifMillis {
+enum gifWaitingTimeMillis {
   off = 0,
-  short = 1000,
-  normal = 3000,
-  long = 4900,
+  min = 1200,
+  mid = 2700,
+  max = 4900,
 }
 
 export {
-  cellTypes,
+  githubLink,
   hintTextOptions,
-  type legalMoves,
+  cellTypes,
   gameStateMessages,
-  waitingTimeGifMillis,
+  gifWaitingTimeMillis,
+  type legalMoves,
 }

@@ -1,31 +1,19 @@
-import {
-  stackMarginSX,
-  loadingDotsSX,
-  createLoadingDotsSX,
-  //   loadingDotsSecondSX,
-  //   loadingDotsThirdSX,
-  //   loadingDotsFourthSX,
-  //   loadingDotsFifthSX,
-  //   loadingDotsSixthSX,
-  //   loadingDotsSeventhSX,
-  //   loadingDotsEighthSX,
-} from "./loadingDotsStyle"
+import { stackMarginSX, createLoadingDotsSX } from "./loadingDotsStyle"
 
 import Container from "@mui/material/Container"
 import Stack from "@mui/material/Stack"
 
-import { waitingTimeGifMillis } from "../../data.consts"
-import { ReactElement } from "react"
+import { gifWaitingTimeMillis } from "../../data.consts"
 import { SxProps } from "@mui/material"
 
 type props = {
-  waitingTime: waitingTimeGifMillis
+  waitingTime: gifWaitingTimeMillis
 }
 
 export default function LoadingDots({ waitingTime }: props) {
   const TOTAL_DOT_DUOS: number = 8
   const TIMESTAMP_DIFFERENCE_SECONDS: number =
-    waitingTime / 1000 / (TOTAL_DOT_DUOS * 2)
+    (waitingTime - 200) / 1000 / (TOTAL_DOT_DUOS * 2)
 
   const dotsArray: Array<SxProps> = []
   mapDotsTimestamps()

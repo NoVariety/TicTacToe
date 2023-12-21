@@ -2,7 +2,7 @@ import { SxProps } from "@mui/material"
 
 const gameHintsSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
-  cursor: "vertical-text",
+  pointerEvents: "none",
   marginBottom: "2rem",
   maxWidth: "65vh",
   height: "6vh",
@@ -10,6 +10,7 @@ const gameHintsSX: SxProps = {
   textAlign: "center",
   wordWrap: "break-word",
   fontWeight: "600",
+  userSelect: "none",
 }
 
 const gridCenterSX: SxProps = {

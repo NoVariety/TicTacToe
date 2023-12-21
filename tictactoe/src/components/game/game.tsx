@@ -9,14 +9,14 @@ import Typography from "@mui/material/Typography"
 import Board from "../board/board"
 import GameAlterPanel from "../gameAlterPanel/gameAlterPanel"
 import WaitingScreen from "../waitingScreen/waitingScreen"
-import Config from "../config/config"
 
 import {
   cellTypes,
   legalMoves,
   gameStateMessages,
-  waitingTimeGifMillis,
+  gifWaitingTimeMillis,
 } from "../../data.consts"
+
 import {
   getRandomPlayerSign,
   getRandomHint,
@@ -29,16 +29,19 @@ import {
   isGameStillOngoing,
 } from "../../utils/gameUtils"
 
-function Game() {
-  let BOARD_LENGTH: number = 3
+type props = {
+  boardLength: number
+  waitingTime: gifWaitingTimeMillis
+}
 
+export default function Game({ boardLength, waitingTime }: props) {
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
   const [gameStateMessage, setGameStateMessage] = useState<gameStateMessages>(
     gameStateMessages.GAME_ONGOING
   )
   const [board, setBoard] = useState<cellTypes[][]>(
-    createEmptyBoard(BOARD_LENGTH)
+    createEmptyBoard(boardLength)
   )
 
   let tempBoard: cellTypes[][] = board.map((arr) => arr.slice())
@@ -57,7 +60,7 @@ function Game() {
   }, [newGameToggle])
 
   const [legalMoves, setLegalMoves] = useState<Array<legalMoves>>(
-    createLegalMoves(BOARD_LENGTH)
+    createLegalMoves(boardLength)
   )
   const [movesMade, setMovesMade] = useState<Array<legalMoves>>([])
 
@@ -95,15 +98,17 @@ function Game() {
     const moves: legalMoves = getRandomCoordinateObject(legalMoves)
 
     if (legalMoves.length > 0) {
-      setPauseScreenOpen(true)
-      setTimeout(
-        () => {
+      if (waitingTime !== gifWaitingTimeMillis.off && legalMoves.length !== 1) {
+        setPauseScreenOpen(true)
+
+        setTimeout(() => {
           changeCell(moves.row, moves.col, computerSign)
 
           setPauseScreenOpen(false)
-        },
-        legalMoves.length !== 1 ? waitingTimeGifMillis.long : 0
-      )
+        }, waitingTime)
+      } else {
+        changeCell(moves.row, moves.col, computerSign)
+      }
     }
   }
 
@@ -145,8 +150,8 @@ function Game() {
 
   function isThereAWinner(): boolean {
     const isGameWon: boolean =
-      checkSlashes(BOARD_LENGTH, tempBoard, setWinnerMessage) ||
-      checkRowsCols(BOARD_LENGTH, tempBoard, setWinnerMessage)
+      checkSlashes(boardLength, tempBoard, setWinnerMessage) ||
+      checkRowsCols(boardLength, tempBoard, setWinnerMessage)
     if (!isGameWon && isBoardFull(legalMoves)) {
       setGameStateMessage(gameStateMessages.DRAW_MESSAGE)
     }
@@ -155,7 +160,7 @@ function Game() {
   }
 
   useEffect(() => {
-    const MINIMUM_MOVES_REQUIRED_TO_WIN: number = BOARD_LENGTH * 2 - 1
+    const MINIMUM_MOVES_REQUIRED_TO_WIN: number = boardLength * 2 - 1
 
     if (movesMade.length >= MINIMUM_MOVES_REQUIRED_TO_WIN) {
       isThereAWinner()
@@ -189,10 +194,10 @@ function Game() {
     setHintsText(getRandomHint())
     setGameStateMessage(gameStateMessages.GAME_ONGOING)
 
-    setBoard(createEmptyBoard(BOARD_LENGTH))
+    setBoard(createEmptyBoard(boardLength))
     tempBoard = board.map((arr) => arr.slice())
 
-    setLegalMoves(createLegalMoves(BOARD_LENGTH))
+    setLegalMoves(createLegalMoves(boardLength))
     setMovesMade([])
 
     setPlayerSign(getRandomPlayerSign())
@@ -244,12 +249,8 @@ function Game() {
         handleGameStatePauseClose={handleGameStatePauseClose}
         rewindTurn={rewindTurn}
       />
-      <WaitingScreen
-        open={pauseScreenOpen}
-        waitingTime={waitingTimeGifMillis.long}
-      />
+
+      <WaitingScreen open={pauseScreenOpen} waitingTime={waitingTime} />
     </Container>
   )
 }
-
-export default Game

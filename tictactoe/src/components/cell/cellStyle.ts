@@ -26,7 +26,7 @@ const signSX: SxProps = {
   margin: "auto",
   color: "#1d1d1d",
   fontFamily: "Permanent Marker" || "sans-serif",
-  fontSize: "5vw",
+  fontSize: "10vh",
 }
 
 export { boardCellSX, signSX }

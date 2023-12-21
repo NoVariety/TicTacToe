@@ -1,6 +1,7 @@
 import { SxProps } from "@mui/material"
 
 import liquidFill from "../../images/liquidFill.png"
+import rewindArrow from "../../images/rewindArrow.png"
 
 const newGameButtonSX: SxProps = {
   fontFamily: "Caveat" || "sans-serif",
@@ -9,6 +10,7 @@ const newGameButtonSX: SxProps = {
   padding: "1rem 2rem",
   fontSize: "2rem",
   fontWeight: "600",
+  userSelect: "none",
 
   borderTopLeftRadius: "255px 15px",
   borderTopRightRadius: "15px 225px",
@@ -28,7 +30,7 @@ const newGameButtonSX: SxProps = {
 
   "&:hover": {
     backgroundPosition: "500% 100%",
-    color: "white",
+    color: "#eeeeee",
     boxShadow: "2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)",
     transition: "1.25s ease",
   },
@@ -41,7 +43,7 @@ const rewindButtonSX: SxProps = {
   borderRadius: "45%",
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
-  backgroundImage: `url(https://cdn-icons-png.flaticon.com/128/5542/5542182.png)`,
+  backgroundImage: `url(${rewindArrow})`,
   zIndex: "100",
   marginTop: "2vh",
 
@@ -72,7 +74,7 @@ function getGameStateProps(gameStatePauseOpen: boolean): SxProps {
     ...newGameContainerSX,
     ...(gameStatePauseOpen && {
       outline: "5px dashed #555",
-      outlineColor: "white",
+      outlineColor: "#eeeeee",
       zIndex: "100",
       transition: "0.2s",
 
@@ -97,7 +99,7 @@ function getRewindDisabledProps(
       movesMadeLength >= 1 && {
         outline: "5px dashed #555",
         borderRadius: "4vh",
-        outlineColor: "white",
+        outlineColor: "#eeeeee",
         transition: "0.2s",
 
         "&:hover": {
