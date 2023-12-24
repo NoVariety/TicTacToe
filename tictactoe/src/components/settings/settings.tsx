@@ -15,52 +15,51 @@ import Slide from "@mui/material/Slide"
 
 import { gifWaitingTimeMillis } from "../../data.consts"
 import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
+import { getToggleContainerSX } from "../settingsTurnTimer/settingsTurnTimerStyle"
 
 type props = {
   boardLength: number
   setBoardLength: Dispatch<SetStateAction<number>>
   waitingTime: gifWaitingTimeMillis
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
-  tempWaitingTime: gifWaitingTimeMillis
-  setTempWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
+  isWaitingTimeEnabled: boolean
+  toggleWaitingTime: () => void
 }
 
 export default function Settings({
-  boardLength,
-  setBoardLength,
   waitingTime,
   setWaitingTime,
-  tempWaitingTime,
-  setTempWaitingTime,
+  isWaitingTimeEnabled,
+  toggleWaitingTime,
 }: props) {
-  const [configOpen, setConfigOpen] = useState<boolean>(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
   return (
     <Container>
       <Stack direction="row" spacing={0}>
         <Container
-          sx={{ ...getConfigureButtonToggleSX(configOpen) }}
+          sx={{ ...getConfigureButtonToggleSX(isSettingsOpen) }}
           onClick={() => {
-            setConfigOpen((prev) => !prev)
+            setIsSettingsOpen((prev) => !prev)
           }}
         ></Container>
 
         <Typography
           variant="h4"
-          sx={{ ...getPauseSubTextToggleSX(configOpen) }}
+          sx={{ ...getPauseSubTextToggleSX(isSettingsOpen) }}
         >
-          {`< ${configOpen ? "close" : "open"} game settings`}
+          {`< ${isSettingsOpen ? "close" : "open"} game settings`}
         </Typography>
       </Stack>
 
-      <Modal open={configOpen} sx={configModalSX}>
-        <Slide direction="right" in={configOpen} mountOnEnter unmountOnExit>
+      <Modal open={isSettingsOpen} sx={configModalSX}>
+        <Slide direction="right" in={isSettingsOpen} mountOnEnter unmountOnExit>
           <Container sx={configContainerSX}>
             <SettingsTurnTimer
               waitingTime={waitingTime}
               setWaitingTime={setWaitingTime}
-              tempWaitingTime={tempWaitingTime}
-              setTempWaitingTime={setTempWaitingTime}
+              isWaitingTimeEnabled={isWaitingTimeEnabled}
+              toggleWaitingTime={toggleWaitingTime}
             />
           </Container>
         </Slide>

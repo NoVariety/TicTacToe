@@ -49,6 +49,15 @@ const toggleContainerSX: SxProps = {
   cursor: "pointer",
 }
 
+function getToggleContainerSX(isDisabled: boolean): SxProps {
+  return {
+    ...toggleContainerSX,
+    ...(isDisabled && {
+      backgroundColor: "transparent",
+    }),
+  }
+}
+
 function getWaitingButtonsSX(isDisabled: boolean): SxProps {
   return {
     ...waitingTextButtonsSX,
@@ -62,15 +71,6 @@ function getWaitingButtonsSX(isDisabled: boolean): SxProps {
             textShadow: "2px 2px #b3b3b3",
           },
         }),
-  }
-}
-
-function getToggleContainerSX(isDisabled: boolean): SxProps {
-  return {
-    ...toggleContainerSX,
-    ...(isDisabled && {
-      backgroundColor: "transparent",
-    }),
   }
 }
 

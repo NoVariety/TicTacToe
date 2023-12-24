@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { appTitleSX, bottomTextSX, appGridSX, appSX } from "./AppStyle"
 
@@ -19,6 +19,24 @@ export default function App() {
   )
   const [tempWaitingTime, setTempWaitingTime] =
     useState<gifWaitingTimeMillis>(waitingTime)
+  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] =
+    useState<boolean>(true)
+
+  const toggleWaitingTime = (): void => {
+    if (waitingTime !== gifWaitingTimeMillis.off) {
+      setTempWaitingTime(waitingTime)
+    }
+    setIsWaitingTimeEnabled((prev) => !prev)
+  }
+
+  useEffect(() => {
+    if (isWaitingTimeEnabled) {
+      setWaitingTime(tempWaitingTime)
+      // setWaitingTime(gifWaitingTimeMillis.min)
+    } else {
+      setWaitingTime(gifWaitingTimeMillis.off)
+    }
+  }, [isWaitingTimeEnabled, setWaitingTime])
 
   return (
     <Container sx={appSX}>
@@ -35,8 +53,8 @@ export default function App() {
         setBoardLength={setBoardLength}
         waitingTime={waitingTime}
         setWaitingTime={setWaitingTime}
-        tempWaitingTime={tempWaitingTime}
-        setTempWaitingTime={setTempWaitingTime}
+        isWaitingTimeEnabled={isWaitingTimeEnabled}
+        toggleWaitingTime={toggleWaitingTime}
       />
 
       <Link

@@ -14,23 +14,23 @@ import Typography from "@mui/material/Typography"
 
 import { gifWaitingTimeMillis } from "../../data.consts"
 
-type props = {
-  waitingTime: gifWaitingTimeMillis
-  setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
-  tempWaitingTime: gifWaitingTimeMillis
-  setTempWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
-}
-
 type waitingTimeDisplay = {
   waitingTimeName: string
   waitingTimeValue: gifWaitingTimeMillis
 }
 
+type props = {
+  waitingTime: gifWaitingTimeMillis
+  setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
+  isWaitingTimeEnabled: boolean
+  toggleWaitingTime: () => void
+}
+
 export default function SettingsTurnTimer({
   waitingTime,
   setWaitingTime,
-  tempWaitingTime,
-  setTempWaitingTime,
+  isWaitingTimeEnabled,
+  toggleWaitingTime,
 }: props) {
   const waitingTimes: Array<waitingTimeDisplay> = [
     { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.off },
@@ -39,16 +39,10 @@ export default function SettingsTurnTimer({
     { waitingTimeName: "max", waitingTimeValue: gifWaitingTimeMillis.max },
   ]
 
-  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] =
-    useState<boolean>(true)
   const [waitingTimeArrIndex, setWaitingTimeArrIndex] = useState<number>(
     waitingTimes.findIndex((item) => item.waitingTimeValue === waitingTime)
   )
 
-  const toggleWaitingTime = (): void => {
-    setTempWaitingTime(waitingTime)
-    setIsWaitingTimeEnabled((prev) => !prev)
-  }
   const incrementWaitingTime = (): void => {
     setWaitingTimeArrIndex((prev) => prev + 1)
   }
@@ -59,21 +53,6 @@ export default function SettingsTurnTimer({
   useEffect(() => {
     setWaitingTime(waitingTimes[waitingTimeArrIndex].waitingTimeValue)
   }, [waitingTimeArrIndex])
-
-  //! fix bug in which playing turn after offing waiting time resets it back to prev =>
-  //!   bug happens because component re-renders on close
-  //!   possible fix to try: moving the tempWaitingTime, isWaitingTimeEnabled and the useEffect up to App to prevent reset on re-render
-  useEffect(() => {
-    console.log("twt " + tempWaitingTime)
-    console.log("wait " + waitingTime)
-    console.log(isWaitingTimeEnabled)
-
-    if (isWaitingTimeEnabled) {
-      setWaitingTime(tempWaitingTime)
-    } else {
-      setWaitingTime(gifWaitingTimeMillis.off)
-    }
-  }, [isWaitingTimeEnabled, setWaitingTime])
 
   function getWaitingTimeDisplayName(): string {
     return (
@@ -93,7 +72,6 @@ export default function SettingsTurnTimer({
           }}
           disableGutters
         ></Container>
-
         <Stack direction="row" spacing={0}>
           <Container
             onClick={decrementWaitingTime}
