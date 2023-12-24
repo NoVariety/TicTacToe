@@ -22,17 +22,20 @@ export default function App() {
     waitingTime !== gifWaitingTimeMillis.off
   )
 
-  useEffect(() => {
+  function saveWaitingTimeToTemp() {
     if (waitingTime !== gifWaitingTimeMillis.off) {
       setTempWaitingTime(waitingTime)
     }
+  }
+
+  useEffect(() => {
+    saveWaitingTimeToTemp()
   }, [waitingTime])
 
   //! try moving this to the child setting
   const toggleWaitingTime = (): void => {
-    if (waitingTime !== gifWaitingTimeMillis.off) {
-      setTempWaitingTime(waitingTime)
-    }
+    saveWaitingTimeToTemp()
+
     setIsWaitingTimeEnabled((prev) => !prev)
   }
 
