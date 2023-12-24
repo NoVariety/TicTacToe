@@ -19,8 +19,9 @@ export default function App() {
   )
   const [tempWaitingTime, setTempWaitingTime] =
     useState<gifWaitingTimeMillis>(waitingTime)
-  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] =
-    useState<boolean>(true)
+  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] = useState<boolean>(
+    waitingTime !== gifWaitingTimeMillis.off
+  )
 
   const toggleWaitingTime = (): void => {
     if (waitingTime !== gifWaitingTimeMillis.off) {
@@ -32,7 +33,6 @@ export default function App() {
   useEffect(() => {
     if (isWaitingTimeEnabled) {
       setWaitingTime(tempWaitingTime)
-      // setWaitingTime(gifWaitingTimeMillis.min)
     } else {
       setWaitingTime(gifWaitingTimeMillis.off)
     }
@@ -55,6 +55,7 @@ export default function App() {
         setWaitingTime={setWaitingTime}
         isWaitingTimeEnabled={isWaitingTimeEnabled}
         toggleWaitingTime={toggleWaitingTime}
+        tempWaitingTime={tempWaitingTime}
       />
 
       <Link

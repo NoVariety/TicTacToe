@@ -24,6 +24,7 @@ type props = {
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
   toggleWaitingTime: () => void
+  tempWaitingTime: gifWaitingTimeMillis
 }
 
 export default function SettingsTurnTimer({
@@ -31,6 +32,7 @@ export default function SettingsTurnTimer({
   setWaitingTime,
   isWaitingTimeEnabled,
   toggleWaitingTime,
+  tempWaitingTime,
 }: props) {
   const waitingTimes: Array<waitingTimeDisplay> = [
     { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.off },
@@ -40,7 +42,7 @@ export default function SettingsTurnTimer({
   ]
 
   const [waitingTimeArrIndex, setWaitingTimeArrIndex] = useState<number>(
-    waitingTimes.findIndex((item) => item.waitingTimeValue === waitingTime)
+    waitingTimes.findIndex((item) => item.waitingTimeValue === tempWaitingTime)
   )
 
   const incrementWaitingTime = (): void => {
@@ -55,10 +57,10 @@ export default function SettingsTurnTimer({
   }, [waitingTimeArrIndex])
 
   function getWaitingTimeDisplayName(): string {
-    return (
-      waitingTimes.find((item) => item.waitingTimeValue === waitingTime)
-        ?.waitingTimeName || "OFF"
-    )
+    return isWaitingTimeEnabled
+      ? waitingTimes.find((item) => item.waitingTimeValue === waitingTime)
+          ?.waitingTimeName || "off"
+      : "off"
   }
 
   return (
@@ -68,7 +70,7 @@ export default function SettingsTurnTimer({
         <Container
           onClick={toggleWaitingTime}
           sx={{
-            ...getToggleContainerSX(waitingTime === gifWaitingTimeMillis.off),
+            ...getToggleContainerSX(!isWaitingTimeEnabled),
           }}
           disableGutters
         ></Container>
@@ -83,9 +85,11 @@ export default function SettingsTurnTimer({
           >
             -
           </Container>
+
           <Typography sx={waitingTextSX}>
             {getWaitingTimeDisplayName()}
           </Typography>
+
           <Container
             onClick={incrementWaitingTime}
             sx={{

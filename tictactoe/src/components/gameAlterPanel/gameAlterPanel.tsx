@@ -1,8 +1,6 @@
 import {
   newGameButtonSX,
-  rewindButtonSX,
   actionButtonsGridSX,
-  newGameContainerSX,
   getGameStateProps,
   getRewindDisabledProps,
 } from "./gameAlterPanelStyle"
@@ -11,7 +9,6 @@ import Grid from "@mui/material/Grid"
 import Stack from "@mui/material/Stack"
 import Container from "@mui/material/Container"
 import Button from "@mui/material/Button"
-import { SxProps } from "@mui/material"
 
 import RewindPause from "../rewindPause/rewindPause"
 import GameStatePause from "../gameStatePause/gameStatePause"

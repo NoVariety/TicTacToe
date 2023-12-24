@@ -15,7 +15,6 @@ import Slide from "@mui/material/Slide"
 
 import { gifWaitingTimeMillis } from "../../data.consts"
 import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
-import { getToggleContainerSX } from "../settingsTurnTimer/settingsTurnTimerStyle"
 
 type props = {
   boardLength: number
@@ -24,6 +23,7 @@ type props = {
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
   toggleWaitingTime: () => void
+  tempWaitingTime: gifWaitingTimeMillis
 }
 
 export default function Settings({
@@ -31,6 +31,7 @@ export default function Settings({
   setWaitingTime,
   isWaitingTimeEnabled,
   toggleWaitingTime,
+  tempWaitingTime,
 }: props) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
@@ -60,6 +61,7 @@ export default function Settings({
               setWaitingTime={setWaitingTime}
               isWaitingTimeEnabled={isWaitingTimeEnabled}
               toggleWaitingTime={toggleWaitingTime}
+              tempWaitingTime={tempWaitingTime}
             />
           </Container>
         </Slide>
