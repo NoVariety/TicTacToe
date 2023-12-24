@@ -1,5 +1,7 @@
 import { SxProps } from "@mui/material"
 
+import { colors } from "../../data.styles"
+
 const stackMarginSX: SxProps = {
   marginLeft: "0.8vh",
 }
@@ -11,7 +13,7 @@ const loadingDotsSX: SxProps = {
   height: "10px",
   borderRadius: "5px",
   backgroundColor: "#9880ff",
-  color: "#eeeeee",
+  color: colors.SECONDARY,
   boxShadow: "9999px 0 0 -5px",
   animation: "1s infinite linear",
   zIndex: "100",
@@ -25,7 +27,7 @@ const loadingDotsSX: SxProps = {
     height: "10px",
     borderRadius: "5px",
     backgroundColor: "#9880ff",
-    color: "#eeeeee",
+    color: colors.SECONDARY,
   },
   "&::before": {
     boxShadow: "9984px 0 0 -5px",

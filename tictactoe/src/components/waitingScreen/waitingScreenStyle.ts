@@ -32,10 +32,10 @@ const waitingModalSX: SxProps = {
 function getGifPlayerSX(waitingTime: gifWaitingTimeMillis): SxProps {
   return {
     ...gifPlayerSX,
-    ...(waitingTime === gifWaitingTimeMillis.mid && {
+    ...(waitingTime === gifWaitingTimeMillis.MID && {
       backgroundImage: `url(${waitingGifAverage})`,
     }),
-    ...(waitingTime === gifWaitingTimeMillis.max && {
+    ...(waitingTime === gifWaitingTimeMillis.MAX && {
       backgroundImage: `url(${waitingGifLong})`,
     }),
   }

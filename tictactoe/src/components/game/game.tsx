@@ -114,7 +114,7 @@ export default function Game({ boardLength, waitingTime }: props) {
     if (!isFirstRender) {
       if (legalMoves.length > 0) {
         if (
-          waitingTime !== gifWaitingTimeMillis.off &&
+          waitingTime !== gifWaitingTimeMillis.OFF &&
           legalMoves.length !== 1
         ) {
           setPauseScreenOpen(true)

@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
-  waitingContainerSX,
   waitingTextSX,
-  propertyTitleSX,
   getWaitingButtonsSX,
   getToggleContainerSX,
 } from "./settingsBoardLengthStyle"
+
+import { waitingContainerSX, propertyTitleSX } from "../settings/settingsStyle"
 
 import Container from "@mui/material/Container"
 import Stack from "@mui/material/Stack"

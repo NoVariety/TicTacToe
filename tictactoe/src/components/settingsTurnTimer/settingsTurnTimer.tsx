@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
-  waitingContainerSX,
   waitingTextSX,
-  propertyTitleSX,
   getWaitingButtonsSX,
   getToggleContainerSX,
 } from "./settingsTurnTimerStyle"
+
+import { waitingContainerSX, propertyTitleSX } from "../settings/settingsStyle"
 
 import Container from "@mui/material/Container"
 import Stack from "@mui/material/Stack"
@@ -35,10 +35,10 @@ export default function SettingsTurnTimer({
   tempWaitingTime,
 }: props) {
   const waitingTimes: Array<waitingTimeDisplay> = [
-    { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.off },
-    { waitingTimeName: "min", waitingTimeValue: gifWaitingTimeMillis.min },
-    { waitingTimeName: "mid", waitingTimeValue: gifWaitingTimeMillis.mid },
-    { waitingTimeName: "max", waitingTimeValue: gifWaitingTimeMillis.max },
+    { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.OFF },
+    { waitingTimeName: "min", waitingTimeValue: gifWaitingTimeMillis.MIN },
+    { waitingTimeName: "mid", waitingTimeValue: gifWaitingTimeMillis.MID },
+    { waitingTimeName: "max", waitingTimeValue: gifWaitingTimeMillis.MAX },
   ]
 
   const [waitingTimeArrIndex, setWaitingTimeArrIndex] = useState<number>(

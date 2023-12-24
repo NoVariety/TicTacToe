@@ -1,9 +1,11 @@
 import { SxProps } from "@mui/material"
 
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../data.styles"
+
 const pauseTextSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
-  color: "#eeeeee",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
+  color: colors.SECONDARY,
   textAlign: "center",
   marginTop: "44vh",
   textShadow:

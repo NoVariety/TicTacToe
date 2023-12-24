@@ -45,10 +45,16 @@ enum gameStateMessages {
 }
 
 enum gifWaitingTimeMillis {
-  off = 0,
-  min = 1200,
-  mid = 2700,
-  max = 4900,
+  OFF = 0,
+  MIN = 1200,
+  MID = 2700,
+  MAX = 4900,
+}
+
+enum boardLengths {
+  MIN_LENGTH = 1,
+  MAX_LENGTH = 10,
+  DEFAULT_LENGTH = 3,
 }
 
 export {
@@ -57,5 +63,6 @@ export {
   cellTypes,
   gameStateMessages,
   gifWaitingTimeMillis,
+  boardLengths,
   type legalMoves,
 }

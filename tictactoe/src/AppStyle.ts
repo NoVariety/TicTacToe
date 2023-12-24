@@ -1,5 +1,8 @@
 import { SxProps } from "@mui/material"
+
 import background from "./images/paperBackground.jpg"
+
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "./data.styles"
 
 const appSX: SxProps = {
   backgroundImage: `url(${background})`,
@@ -12,26 +15,27 @@ const appSX: SxProps = {
 }
 
 const appTitleSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
   fontSize: "10vh",
   marginBottom: "2rem",
   textAlign: "center",
   wordWrap: "break-word",
-  fontWeight: "700",
+  fontWeight: DEFAULT_FONT_WEIGHT,
   marginTop: "3vh",
   userSelect: "none",
+  color: colors.MAIN,
 }
 
 const bottomTextSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
   fontSize: "2.5vh",
   cursor: "pointer",
   wordWrap: "break-word",
-  fontWeight: "600",
+  fontWeight: DEFAULT_FONT_WEIGHT,
   position: "absolute",
   right: "1vh",
   bottom: "0vh",
-  color: "#1d1d1d",
+  color: colors.MAIN,
   userSelect: "none",
 }
 

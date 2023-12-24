@@ -3,13 +3,20 @@ import { SxProps } from "@mui/material"
 import liquidFill from "../../images/liquidFill.png"
 import rewindArrow from "../../images/rewindArrow.png"
 
+import {
+  DEFAULT_FONT_WEIGHT,
+  BUTTON_TRANSITION_TIME,
+  fonts,
+  colors,
+} from "../../data.styles"
+
 const newGameButtonSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
   width: "15rem",
   background: "transparent",
   padding: "1rem 2rem",
   fontSize: "2rem",
-  fontWeight: "600",
+  fontWeight: DEFAULT_FONT_WEIGHT,
   userSelect: "none",
 
   borderTopLeftRadius: "255px 15px",
@@ -19,18 +26,17 @@ const newGameButtonSX: SxProps = {
   border: "solid 0.4vh",
   lineHeight: "4vh",
   cursor: "pointer",
-  color: "#1d1d1d",
-  borderRightColor: "black",
+  color: colors.MAIN,
   textShadow: "0 3px 5px rgba(#000, 0.25)",
   backgroundImage: `url(${liquidFill})`,
   backgroundRepeat: "repeat-x",
   backgroundPosition: "0 -100%",
   transition: "0.5s ease",
-  borderColor: "#1d1d1d",
+  borderColor: colors.MAIN,
 
   "&:hover": {
     backgroundPosition: "500% 100%",
-    color: "#eeeeee",
+    color: colors.SECONDARY,
     boxShadow: "2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)",
     transition: "1.25s ease",
   },
@@ -48,7 +54,7 @@ const rewindButtonSX: SxProps = {
   marginTop: "2vh",
 
   "&:hover": {
-    borderColor: "#1d1d1d",
+    borderColor: colors.MAIN,
     boxShadow: "3px 6px 5px -6px hsla(0, 0%, 0%, 0.5)",
   },
 
@@ -74,12 +80,12 @@ function getGameStateProps(gameStatePauseOpen: boolean): SxProps {
     ...newGameContainerSX,
     ...(gameStatePauseOpen && {
       outline: "5px dashed #555",
-      outlineColor: "#eeeeee",
+      outlineColor: colors.SECONDARY,
       zIndex: "100",
-      transition: "0.2s",
+      transition: BUTTON_TRANSITION_TIME,
 
       "&:hover": {
-        transition: "0.2s",
+        transition: BUTTON_TRANSITION_TIME,
         outlineColor: "transparent",
       },
     }),
@@ -99,11 +105,11 @@ function getRewindDisabledProps(
       movesMadeLength >= 1 && {
         outline: "5px dashed #555",
         borderRadius: "4vh",
-        outlineColor: "#eeeeee",
-        transition: "0.2s",
+        outlineColor: colors.SECONDARY,
+        transition: BUTTON_TRANSITION_TIME,
 
         "&:hover": {
-          transition: "0.2s",
+          transition: BUTTON_TRANSITION_TIME,
           outlineColor: "transparent",
         },
       }),

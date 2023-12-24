@@ -1,7 +1,9 @@
 import { SxProps } from "@mui/material"
 
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../data.styles"
+
 const gameHintsSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
   pointerEvents: "none",
   marginBottom: "2rem",
   maxWidth: "65vh",
@@ -9,8 +11,9 @@ const gameHintsSX: SxProps = {
   fontSize: "3.3vh",
   textAlign: "center",
   wordWrap: "break-word",
-  fontWeight: "600",
+  fontWeight: DEFAULT_FONT_WEIGHT,
   userSelect: "none",
+  color: colors.MAIN,
 }
 
 const gridCenterSX: SxProps = {

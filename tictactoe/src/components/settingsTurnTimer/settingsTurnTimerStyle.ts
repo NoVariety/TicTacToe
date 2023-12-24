@@ -1,31 +1,21 @@
 import { SxProps } from "@mui/material"
 
-const waitingContainerSX: SxProps = {
-  marginTop: "3vh",
-}
-
-const propertyTitleSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
-  fontSize: "3vh",
-  color: "#1d1d1d",
-  textAlign: "center",
-  userSelect: "none",
-}
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../data.styles"
 
 const waitingTextSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
+  color: colors.MAIN,
   fontSize: "4vh",
-  color: "#1d1d1d",
   userSelect: "none",
   width: "5vh",
+  minWidth: "5vh",
 }
 
 const waitingTextButtonsSX: SxProps = {
-  fontFamily: "Caveat" || "sans-serif",
-  fontWeight: "600",
-  color: "#1d1d1d",
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
+  color: colors.MAIN,
   userSelect: "none",
   fontSize: "4.5vh",
   cursor: "pointer",
@@ -36,16 +26,17 @@ const toggleContainerSX: SxProps = {
   marginLeft: "1vh",
   height: "2vh",
   width: "2vh",
-  outline: "#1d1d1d",
+  outline: colors.MAIN,
   outlineStyle: "solid",
   outlineWidth: "0.4vh",
   borderTopLeftRadius: "15px 100px",
   borderTopRightRadius: "100px 15px",
   borderBottomRightRadius: "15px 100px",
   borderBottomLeftRadius: "100px 15px",
-  color: "#1d1d1d",
-  backgroundColor: "#1d1d1d",
-  border: "0.2vh solid #eeeeee ",
+  color: colors.MAIN,
+  backgroundColor: colors.MAIN,
+  border: "0.2vh solid",
+  borderColor: colors.SECONDARY,
   cursor: "pointer",
 }
 
@@ -74,10 +65,4 @@ function getWaitingButtonsSX(isDisabled: boolean): SxProps {
   }
 }
 
-export {
-  waitingContainerSX,
-  propertyTitleSX,
-  waitingTextSX,
-  getWaitingButtonsSX,
-  getToggleContainerSX,
-}
+export { waitingTextSX, getWaitingButtonsSX, getToggleContainerSX }

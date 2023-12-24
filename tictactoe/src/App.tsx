@@ -7,23 +7,23 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import Link from "@mui/material/Link"
 
-import { gifWaitingTimeMillis, githubLink } from "./data.consts"
+import { gifWaitingTimeMillis, githubLink, boardLengths } from "./data.consts"
 
 import Game from "./components/game/game"
 import Settings from "./components/settings/settings"
 
 export default function App() {
   const [waitingTime, setWaitingTime] = useState<gifWaitingTimeMillis>(
-    gifWaitingTimeMillis.mid
+    gifWaitingTimeMillis.MID
   )
   const [tempWaitingTime, setTempWaitingTime] =
     useState<gifWaitingTimeMillis>(waitingTime)
   const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] = useState<boolean>(
-    waitingTime !== gifWaitingTimeMillis.off
+    waitingTime !== gifWaitingTimeMillis.OFF
   )
 
   function saveWaitingTimeToTemp() {
-    if (waitingTime !== gifWaitingTimeMillis.off) {
+    if (waitingTime !== gifWaitingTimeMillis.OFF) {
       setTempWaitingTime(waitingTime)
     }
   }
@@ -44,12 +44,14 @@ export default function App() {
     if (isWaitingTimeEnabled) {
       setWaitingTime(tempWaitingTime)
     } else {
-      setWaitingTime(gifWaitingTimeMillis.off)
+      setWaitingTime(gifWaitingTimeMillis.OFF)
     }
   }, [isWaitingTimeEnabled, setWaitingTime])
 
   //TODO: part 4 - dynamic board length
-  const [boardLength, setBoardLength] = useState<number>(3)
+  const [boardLength, setBoardLength] = useState<number>(
+    boardLengths.DEFAULT_LENGTH
+  )
 
   return (
     <Container sx={appSX}>
