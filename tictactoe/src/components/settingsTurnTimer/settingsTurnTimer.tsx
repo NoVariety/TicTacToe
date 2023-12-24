@@ -65,7 +65,7 @@ export default function SettingsTurnTimer({
 
   return (
     <Container sx={waitingContainerSX}>
-      <Typography sx={propertyTitleSX}>{"< Computer Turn Time >"}</Typography>
+      <Typography sx={propertyTitleSX}>{"< Computer Turn Time />"}</Typography>
       <Stack direction="row">
         <Container
           onClick={toggleWaitingTime}

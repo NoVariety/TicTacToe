@@ -15,6 +15,7 @@ import Slide from "@mui/material/Slide"
 
 import { gifWaitingTimeMillis } from "../../data.consts"
 import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
+import SettingsBoardLength from "../settingsBoardSize/settingsBoardLength"
 
 type props = {
   boardLength: number
@@ -27,6 +28,8 @@ type props = {
 }
 
 export default function Settings({
+  boardLength,
+  setBoardLength,
   waitingTime,
   setWaitingTime,
   isWaitingTimeEnabled,
@@ -62,6 +65,11 @@ export default function Settings({
               isWaitingTimeEnabled={isWaitingTimeEnabled}
               toggleWaitingTime={toggleWaitingTime}
               tempWaitingTime={tempWaitingTime}
+            />
+
+            <SettingsBoardLength
+              boardLength={boardLength}
+              setBoardLength={setBoardLength}
             />
           </Container>
         </Slide>

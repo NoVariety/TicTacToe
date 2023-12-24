@@ -26,7 +26,7 @@ const pauseSubTextSX: SxProps = {
 
 const configContainerSX: SxProps = {
   height: "50vh",
-  width: "36vh",
+  width: "36.6vh",
   borderTopLeftRadius: "15px 100px",
   borderTopRightRadius: "100px 15px",
   borderBottomRightRadius: "15px 100px",

@@ -13,7 +13,6 @@ import Game from "./components/game/game"
 import Settings from "./components/settings/settings"
 
 export default function App() {
-  const [boardLength, setBoardLength] = useState<number>(3)
   const [waitingTime, setWaitingTime] = useState<gifWaitingTimeMillis>(
     gifWaitingTimeMillis.mid
   )
@@ -23,6 +22,7 @@ export default function App() {
     waitingTime !== gifWaitingTimeMillis.off
   )
 
+  //! try moving this to the child setting
   const toggleWaitingTime = (): void => {
     if (waitingTime !== gifWaitingTimeMillis.off) {
       setTempWaitingTime(waitingTime)
@@ -30,6 +30,7 @@ export default function App() {
     setIsWaitingTimeEnabled((prev) => !prev)
   }
 
+  //! maybe this too - check if possible
   useEffect(() => {
     if (isWaitingTimeEnabled) {
       setWaitingTime(tempWaitingTime)
@@ -37,6 +38,9 @@ export default function App() {
       setWaitingTime(gifWaitingTimeMillis.off)
     }
   }, [isWaitingTimeEnabled, setWaitingTime])
+
+  //TODO: part 4 - dynamic board length
+  const [boardLength, setBoardLength] = useState<number>(3)
 
   return (
     <Container sx={appSX}>
