@@ -29,6 +29,14 @@ const waitingModalSX: SxProps = {
   border: "none !important",
 }
 
+const dotsContainerSX: SxProps = {
+  position: "absolute",
+  top: "77%",
+  left: "auto",
+  right: "auto",
+  marginLeft: "-2.5vh",
+}
+
 function getGifPlayerSX(waitingTime: gifWaitingTimeMillis): SxProps {
   return {
     ...gifPlayerSX,
@@ -41,4 +49,10 @@ function getGifPlayerSX(waitingTime: gifWaitingTimeMillis): SxProps {
   }
 }
 
-export { gifPlayerSX, gifContainerSX, waitingModalSX, getGifPlayerSX }
+export {
+  gifPlayerSX,
+  gifContainerSX,
+  waitingModalSX,
+  dotsContainerSX,
+  getGifPlayerSX,
+}

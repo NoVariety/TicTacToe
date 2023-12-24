@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material"
 
-import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../data.styles"
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../styles.consts"
 
 const pauseTextSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,

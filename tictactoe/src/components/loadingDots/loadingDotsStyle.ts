@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material"
 
-import { colors } from "../../data.styles"
+import { colors } from "../../styles.consts"
 
 const stackMarginSX: SxProps = {
   marginLeft: "0.8vh",

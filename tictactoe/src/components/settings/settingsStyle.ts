@@ -9,7 +9,7 @@ import {
   BUTTON_TRANSITION_TIME,
   fonts,
   colors,
-} from "../../data.styles"
+} from "../../styles.consts"
 
 const BUTTON_LEFT_DISTANCE: number = 39.5
 const BUTTON_BOTTOM_DISTANCE: number = 1.5

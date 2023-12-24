@@ -8,7 +8,7 @@ import {
   BUTTON_TRANSITION_TIME,
   fonts,
   colors,
-} from "../../data.styles"
+} from "../../styles.consts"
 
 const newGameButtonSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,

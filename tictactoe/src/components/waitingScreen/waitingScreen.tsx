@@ -4,6 +4,7 @@ import Modal from "@mui/material/Modal"
 import {
   gifContainerSX,
   waitingModalSX,
+  dotsContainerSX,
   getGifPlayerSX,
 } from "./waitingScreenStyle"
 
@@ -21,7 +22,9 @@ export default function WaitingScreen({ open, waitingTime }: props) {
     <Modal open={open} sx={waitingModalSX}>
       <Container sx={gifContainerSX}>
         <Container sx={{ ...getGifPlayerSX(waitingTime) }}></Container>
-        <LoadingDots waitingTime={waitingTime} />
+        <Container sx={dotsContainerSX}>
+          <LoadingDots waitingTime={waitingTime} />
+        </Container>
       </Container>
     </Modal>
   )
