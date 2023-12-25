@@ -2,7 +2,7 @@ import { SxProps } from "@mui/material"
 
 import background from "./images/paperBackground.jpg"
 
-import { DEFAULT_FONT_WEIGHT, fonts, colors } from "./styles.consts"
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "./style.consts"
 
 const appSX: SxProps = {
   backgroundImage: `url(${background})`,

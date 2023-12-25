@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
-  waitingTextSX,
-  getWaitingButtonsSX,
-  getToggleContainerSX,
+  numberInputPropStyle,
+  numberInputSx,
+  setButtonsSx,
+  stackSx,
 } from "./settingsBoardLengthStyle"
 
 import { waitingContainerSX, propertyTitleSX } from "../settings/settingsStyle"
@@ -27,12 +28,15 @@ export default function SettingsBoardLength({
   return (
     <Container sx={waitingContainerSX}>
       <Typography sx={propertyTitleSX}>{"< Board Length />"}</Typography>
-      <Stack direction="row">
-        <Stack direction="row" spacing={0}>
-          <TextField>-</TextField>
+      <Stack direction="row" spacing={0} sx={stackSx}>
+        <TextField
+          sx={numberInputSx}
+          InputProps={{ style: numberInputPropStyle }}
+        ></TextField>
 
-          <Container>+</Container>
-        </Stack>
+        <Container sx={setButtonsSx}>update</Container>
+
+        <Container sx={setButtonsSx}>default</Container>
       </Stack>
     </Container>
   )

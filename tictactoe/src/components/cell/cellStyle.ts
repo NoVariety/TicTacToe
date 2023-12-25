@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material"
 
-import { colors } from "../../styles.consts"
+import { colors } from "../../style.consts"
 
 const boardCellSX: SxProps = {
   height: "15vh",
