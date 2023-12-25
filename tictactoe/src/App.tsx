@@ -76,6 +76,7 @@ export default function App() {
         isWaitingTimeEnabled={isWaitingTimeEnabled}
         setWaitingTime={setWaitingTime}
         tempWaitingTime={tempWaitingTime}
+        tempWaitingTimeRef={tempWaitingTimeRef}
         toggleWaitingTime={toggleWaitingTime}
         tempBoardLength={tempBoardLength}
         setTempBoardLength={setTempBoardLength}

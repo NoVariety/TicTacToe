@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react"
 
 import {
   configContainerSX,
@@ -25,6 +31,7 @@ type props = {
   isWaitingTimeEnabled: boolean
   toggleWaitingTime: () => void
   tempWaitingTime: gifWaitingTimeMillis
+  tempWaitingTimeRef: MutableRefObject<gifWaitingTimeMillis>
   setTempBoardLength: Dispatch<SetStateAction<number>>
   tempBoardLength: number
 }
@@ -36,6 +43,7 @@ export default function Settings({
   isWaitingTimeEnabled,
   toggleWaitingTime,
   tempWaitingTime,
+  tempWaitingTimeRef,
   setTempBoardLength,
   tempBoardLength,
 }: props) {
@@ -72,6 +80,7 @@ export default function Settings({
               isWaitingTimeEnabled={isWaitingTimeEnabled}
               toggleWaitingTime={toggleWaitingTime}
               tempWaitingTime={tempWaitingTime}
+              tempWaitingTimeRef={tempWaitingTimeRef}
             />
 
             <SettingsBoardLength

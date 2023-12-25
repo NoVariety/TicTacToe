@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react"
 
 import {
   waitingContainerSX,
@@ -26,6 +32,7 @@ type props = {
   isWaitingTimeEnabled: boolean
   toggleWaitingTime: () => void
   tempWaitingTime: gifWaitingTimeMillis
+  tempWaitingTimeRef: MutableRefObject<gifWaitingTimeMillis>
 }
 
 export default function SettingsTurnTimer({
@@ -34,6 +41,7 @@ export default function SettingsTurnTimer({
   isWaitingTimeEnabled,
   toggleWaitingTime,
   tempWaitingTime,
+  tempWaitingTimeRef,
 }: props) {
   const waitingTimes: Array<waitingTimeDisplay> = [
     { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.OFF },
@@ -43,7 +51,13 @@ export default function SettingsTurnTimer({
   ]
 
   const [waitingTimeArrIndex, setWaitingTimeArrIndex] = useState<number>(
-    waitingTimes.findIndex((item) => item.waitingTimeValue === tempWaitingTime)
+    waitingTimes.findIndex(
+      (item) =>
+        item.waitingTimeValue ===
+        (tempWaitingTime === gifWaitingTimeMillis.OFF
+          ? tempWaitingTimeRef.current
+          : tempWaitingTime)
+    )
   )
 
   const incrementWaitingTime = (): void => {
