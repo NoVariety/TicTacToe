@@ -19,58 +19,27 @@ import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
 import SettingsBoardLength from "../settingsBoardSize/settingsBoardLength"
 
 type props = {
-  boardLength: number
   setBoardLength: Dispatch<SetStateAction<number>>
   waitingTime: gifWaitingTimeMillis
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
-  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>
+  toggleWaitingTime: () => void
   tempWaitingTime: gifWaitingTimeMillis
-  setTempWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
+  setTempBoardLength: Dispatch<SetStateAction<number>>
+  tempBoardLength: number
 }
 
 export default function Settings({
-  boardLength,
   setBoardLength,
   waitingTime,
   setWaitingTime,
   isWaitingTimeEnabled,
-  setIsWaitingTimeEnabled,
+  toggleWaitingTime,
   tempWaitingTime,
-  setTempWaitingTime,
+  setTempBoardLength,
+  tempBoardLength,
 }: props) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
-  const [tempBoardLength, setTempBoardLength] = useState<number>(boardLength)
-
-  function saveWaitingTimeToTemp() {
-    if (
-      waitingTime !== gifWaitingTimeMillis.OFF ||
-      tempWaitingTime !== gifWaitingTimeMillis.OFF
-    ) {
-      setTempWaitingTime(waitingTime)
-    }
-  }
-
-  //! fix bug in which changing board size resets waiting time
-  useEffect(() => {
-    saveWaitingTimeToTemp()
-  }, [waitingTime])
-
-  //! try moving this to the child setting
-  const toggleWaitingTime = (): void => {
-    saveWaitingTimeToTemp()
-
-    setIsWaitingTimeEnabled((prev) => !prev)
-  }
-
-  //! maybe this too - check if possible
-  useEffect(() => {
-    if (isWaitingTimeEnabled) {
-      setWaitingTime(tempWaitingTime)
-    } else {
-      setWaitingTime(gifWaitingTimeMillis.OFF)
-    }
-  }, [isWaitingTimeEnabled, setWaitingTime])
 
   return (
     <Container>
@@ -106,7 +75,6 @@ export default function Settings({
             />
 
             <SettingsBoardLength
-              boardLength={boardLength}
               setBoardLength={setBoardLength}
               tempBoardLength={tempBoardLength}
               setTempBoardLength={setTempBoardLength}

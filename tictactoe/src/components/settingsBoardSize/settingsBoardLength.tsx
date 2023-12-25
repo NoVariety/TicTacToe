@@ -18,14 +18,12 @@ import { boardLengths } from "../../data.consts"
 import { TextField } from "@mui/material"
 
 type props = {
-  boardLength: number
   setBoardLength: Dispatch<SetStateAction<number>>
   tempBoardLength: number
   setTempBoardLength: Dispatch<SetStateAction<number>>
 }
 
 export default function SettingsBoardLength({
-  boardLength,
   setBoardLength,
   tempBoardLength,
   setTempBoardLength,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { appTitleSX, bottomTextSX, appGridSX, appSX } from "./AppStyle"
 
@@ -19,15 +19,46 @@ export default function App() {
   const [tempWaitingTime, setTempWaitingTime] =
     useState<gifWaitingTimeMillis>(waitingTime)
   const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] = useState<boolean>(
-    // waitingTime !== gifWaitingTimeMillis.OFF
-    true
+    waitingTime !== gifWaitingTimeMillis.OFF
   )
+  const tempWaitingTimeRef = useRef<gifWaitingTimeMillis>(tempWaitingTime)
 
-  console.log("brr")
+  function saveWaitingTimeToTemp() {
+    if (waitingTime !== gifWaitingTimeMillis.OFF) {
+      tempWaitingTimeRef.current = tempWaitingTime
+    }
+    setTempWaitingTime(waitingTime)
+  }
+
+  useEffect(() => {
+    saveWaitingTimeToTemp()
+
+    if (
+      waitingTime === gifWaitingTimeMillis.OFF &&
+      tempWaitingTime === gifWaitingTimeMillis.OFF
+    ) {
+      setWaitingTime(tempWaitingTimeRef.current)
+    }
+  }, [waitingTime])
+
+  const toggleWaitingTime = (): void => {
+    saveWaitingTimeToTemp()
+
+    setIsWaitingTimeEnabled((prev) => !prev)
+  }
+
+  useEffect(() => {
+    if (isWaitingTimeEnabled) {
+      setWaitingTime(tempWaitingTimeRef.current)
+    } else {
+      setWaitingTime(gifWaitingTimeMillis.OFF)
+    }
+  }, [isWaitingTimeEnabled, setWaitingTime])
 
   const [boardLength, setBoardLength] = useState<number>(
     boardLengths.DEFAULT_LENGTH
   )
+  const [tempBoardLength, setTempBoardLength] = useState<number>(boardLength)
 
   return (
     <Container sx={appSX}>
@@ -40,14 +71,14 @@ export default function App() {
       <Game boardLength={boardLength} waitingTime={waitingTime} />
 
       <Settings
-        boardLength={boardLength}
-        setBoardLength={setBoardLength}
         waitingTime={waitingTime}
-        setWaitingTime={setWaitingTime}
+        setBoardLength={setBoardLength}
         isWaitingTimeEnabled={isWaitingTimeEnabled}
-        setIsWaitingTimeEnabled={setIsWaitingTimeEnabled}
+        setWaitingTime={setWaitingTime}
         tempWaitingTime={tempWaitingTime}
-        setTempWaitingTime={setTempWaitingTime}
+        toggleWaitingTime={toggleWaitingTime}
+        tempBoardLength={tempBoardLength}
+        setTempBoardLength={setTempBoardLength}
       />
 
       <Link
