@@ -30,6 +30,9 @@ export default function App() {
     setTempWaitingTime(waitingTime)
   }
 
+  //TODO: try removing all the temptimes and OFF with them, seperate waiting time from on/off so they arent needed
+  //todo: so instead of always relying on the time, check if its on or off and only then access time and send the isWaitingTimeEnabled to game
+
   useEffect(() => {
     saveWaitingTimeToTemp()
 
