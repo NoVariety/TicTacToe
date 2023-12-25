@@ -5,6 +5,7 @@ import {
   configModalSX,
   getPauseSubTextToggleSX,
   getConfigureButtonToggleSX,
+  settingsTitleSX,
 } from "./settingsStyle"
 
 import Container from "@mui/material/Container"
@@ -23,8 +24,9 @@ type props = {
   waitingTime: gifWaitingTimeMillis
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
-  toggleWaitingTime: () => void
+  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>
   tempWaitingTime: gifWaitingTimeMillis
+  setTempWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
 }
 
 export default function Settings({
@@ -33,10 +35,42 @@ export default function Settings({
   waitingTime,
   setWaitingTime,
   isWaitingTimeEnabled,
-  toggleWaitingTime,
+  setIsWaitingTimeEnabled,
   tempWaitingTime,
+  setTempWaitingTime,
 }: props) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
+  const [tempBoardLength, setTempBoardLength] = useState<number>(boardLength)
+
+  function saveWaitingTimeToTemp() {
+    if (
+      waitingTime !== gifWaitingTimeMillis.OFF ||
+      tempWaitingTime !== gifWaitingTimeMillis.OFF
+    ) {
+      setTempWaitingTime(waitingTime)
+    }
+  }
+
+  //! fix bug in which changing board size resets waiting time
+  useEffect(() => {
+    saveWaitingTimeToTemp()
+  }, [waitingTime])
+
+  //! try moving this to the child setting
+  const toggleWaitingTime = (): void => {
+    saveWaitingTimeToTemp()
+
+    setIsWaitingTimeEnabled((prev) => !prev)
+  }
+
+  //! maybe this too - check if possible
+  useEffect(() => {
+    if (isWaitingTimeEnabled) {
+      setWaitingTime(tempWaitingTime)
+    } else {
+      setWaitingTime(gifWaitingTimeMillis.OFF)
+    }
+  }, [isWaitingTimeEnabled, setWaitingTime])
 
   return (
     <Container>
@@ -59,6 +93,10 @@ export default function Settings({
       <Modal open={isSettingsOpen} sx={configModalSX}>
         <Slide direction="right" in={isSettingsOpen} mountOnEnter unmountOnExit>
           <Container sx={configContainerSX}>
+            <Typography variant="h2" sx={settingsTitleSX}>
+              {"< Settings >"}
+            </Typography>
+
             <SettingsTurnTimer
               waitingTime={waitingTime}
               setWaitingTime={setWaitingTime}
@@ -70,6 +108,8 @@ export default function Settings({
             <SettingsBoardLength
               boardLength={boardLength}
               setBoardLength={setBoardLength}
+              tempBoardLength={tempBoardLength}
+              setTempBoardLength={setTempBoardLength}
             />
           </Container>
         </Slide>

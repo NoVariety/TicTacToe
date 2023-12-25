@@ -2,6 +2,10 @@ import { SxProps } from "@mui/material"
 
 import { DEFAULT_FONT_WEIGHT, fonts, colors } from "../../style.consts"
 
+const waitingContainerSX: SxProps = {
+  marginTop: "1vh",
+}
+
 const waitingTextSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,
   fontWeight: DEFAULT_FONT_WEIGHT,
@@ -65,4 +69,9 @@ function getWaitingButtonsSX(isDisabled: boolean): SxProps {
   }
 }
 
-export { waitingTextSX, getWaitingButtonsSX, getToggleContainerSX }
+export {
+  waitingContainerSX,
+  waitingTextSX,
+  getWaitingButtonsSX,
+  getToggleContainerSX,
+}

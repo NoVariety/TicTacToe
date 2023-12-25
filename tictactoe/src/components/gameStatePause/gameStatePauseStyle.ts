@@ -8,8 +8,7 @@ const pauseTextSX: SxProps = {
   color: colors.SECONDARY,
   textAlign: "center",
   marginTop: "44vh",
-  textShadow:
-    "-1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000",
+  textShadow: `-1px 1px 0 ${colors.MAIN}, 1px 1px 0 ${colors.MAIN}, 1px -1px 0 ${colors.MAIN}, -1px -1px 0 ${colors.MAIN}`,
   cursor: "default",
   pointerEvents: "none",
 }

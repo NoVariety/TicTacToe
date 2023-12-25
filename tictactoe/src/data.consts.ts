@@ -53,8 +53,8 @@ enum gifWaitingTimeMillis {
 
 enum boardLengths {
   MIN_LENGTH = 1,
-  MAX_LENGTH = 10,
   DEFAULT_LENGTH = 3,
+  MAX_LENGTH = 7,
 }
 
 export {

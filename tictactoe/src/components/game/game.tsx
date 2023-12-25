@@ -192,6 +192,10 @@ export default function Game({ boardLength, waitingTime }: props) {
     }
   }, [gameStateMessage])
 
+  useEffect(() => {
+    startNewGame()
+  }, [boardLength])
+
   function startNewGame(): void {
     handleGameStatePauseClose()
     setHintsText(getRandomHint())
@@ -240,7 +244,7 @@ export default function Game({ boardLength, waitingTime }: props) {
         </Typography>
       </Grid>
 
-      <Board board={board} playTurn={playTurn} />
+      <Board board={board} boardLength={boardLength} playTurn={playTurn} />
 
       <GameAlterPanel
         movesMade={movesMade}

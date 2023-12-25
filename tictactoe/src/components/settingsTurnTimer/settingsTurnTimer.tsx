@@ -1,12 +1,13 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
+  waitingContainerSX,
   waitingTextSX,
   getWaitingButtonsSX,
   getToggleContainerSX,
 } from "./settingsTurnTimerStyle"
 
-import { waitingContainerSX, propertyTitleSX } from "../settings/settingsStyle"
+import { propertyTitleSX, infoTextSx } from "../settings/settingsStyle"
 
 import Container from "@mui/material/Container"
 import Stack from "@mui/material/Stack"
@@ -66,6 +67,7 @@ export default function SettingsTurnTimer({
   return (
     <Container sx={waitingContainerSX}>
       <Typography sx={propertyTitleSX}>{"< Computer Turn Time />"}</Typography>
+      <Container sx={infoTextSx}>{`can be turned On / Off too`}</Container>
       <Stack direction="row">
         <Container
           onClick={toggleWaitingTime}

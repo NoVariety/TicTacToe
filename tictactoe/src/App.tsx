@@ -19,36 +19,12 @@ export default function App() {
   const [tempWaitingTime, setTempWaitingTime] =
     useState<gifWaitingTimeMillis>(waitingTime)
   const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] = useState<boolean>(
-    waitingTime !== gifWaitingTimeMillis.OFF
+    // waitingTime !== gifWaitingTimeMillis.OFF
+    true
   )
 
-  function saveWaitingTimeToTemp() {
-    if (waitingTime !== gifWaitingTimeMillis.OFF) {
-      setTempWaitingTime(waitingTime)
-    }
-  }
+  console.log("brr")
 
-  useEffect(() => {
-    saveWaitingTimeToTemp()
-  }, [waitingTime])
-
-  //! try moving this to the child setting
-  const toggleWaitingTime = (): void => {
-    saveWaitingTimeToTemp()
-
-    setIsWaitingTimeEnabled((prev) => !prev)
-  }
-
-  //! maybe this too - check if possible
-  useEffect(() => {
-    if (isWaitingTimeEnabled) {
-      setWaitingTime(tempWaitingTime)
-    } else {
-      setWaitingTime(gifWaitingTimeMillis.OFF)
-    }
-  }, [isWaitingTimeEnabled, setWaitingTime])
-
-  //TODO: part 4 - dynamic board length
   const [boardLength, setBoardLength] = useState<number>(
     boardLengths.DEFAULT_LENGTH
   )
@@ -69,8 +45,9 @@ export default function App() {
         waitingTime={waitingTime}
         setWaitingTime={setWaitingTime}
         isWaitingTimeEnabled={isWaitingTimeEnabled}
-        toggleWaitingTime={toggleWaitingTime}
+        setIsWaitingTimeEnabled={setIsWaitingTimeEnabled}
         tempWaitingTime={tempWaitingTime}
+        setTempWaitingTime={setTempWaitingTime}
       />
 
       <Link

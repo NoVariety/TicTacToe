@@ -3,18 +3,12 @@ import { SxProps } from "@mui/material"
 import { colors } from "../../style.consts"
 
 const boardCellSX: SxProps = {
-  height: "15vh",
-  width: "15vh",
   background: "transparent",
-  padding: "0.5rem 0.5rem",
-  margin: "0 0.5rem",
-  marginBottom: "1rem",
   color: colors.MAIN,
   borderTopLeftRadius: "255px 15px",
   borderTopRightRadius: "15px 225px",
   borderBottomRightRadius: "225px 15px",
   borderBottomLeftRadius: "15px 255px",
-  border: "solid 0.5vh",
   cursor: "crosshair",
   float: "center",
   "&:hover": {
@@ -23,12 +17,29 @@ const boardCellSX: SxProps = {
 }
 
 const signSX: SxProps = {
+  fontFamily: "Permanent Marker" || "sans-serif",
   textAlign: "center",
-  lineHeight: "10vh",
   margin: "auto",
   color: colors.MAIN,
-  fontFamily: "Permanent Marker" || "sans-serif",
-  fontSize: "10vh",
 }
 
-export { boardCellSX, signSX }
+function getBoardCellSX(boardLength: number): SxProps {
+  return {
+    ...boardCellSX,
+    height: `${45 / boardLength}vh`,
+    width: `${45 / boardLength}vh`,
+    padding: `${3 / boardLength}vh ${3 / boardLength}vh`,
+    margin: `0 ${2.25 / boardLength}vh ${4.5 / boardLength}vh`,
+    border: `solid ${1.5 / boardLength}vh`,
+  }
+}
+
+function getSignSX(boardLength: number): SxProps {
+  return {
+    ...signSX,
+    fontSize: `${30 / boardLength}vh`,
+    lineHeight: `${28 / boardLength}vh`,
+  }
+}
+
+export { getBoardCellSX, getSignSX }

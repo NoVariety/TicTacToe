@@ -14,8 +14,14 @@ import {
 const BUTTON_LEFT_DISTANCE: number = 39.5
 const BUTTON_BOTTOM_DISTANCE: number = 1.5
 
-const waitingContainerSX: SxProps = {
-  marginTop: "3vh",
+const settingsTitleSX: SxProps = {
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
+  fontSize: "4vh",
+  color: colors.MAIN,
+  textAlign: "center",
+  userSelect: "none",
+  marginTop: "2vh",
 }
 
 const propertyTitleSX: SxProps = {
@@ -27,14 +33,23 @@ const propertyTitleSX: SxProps = {
   userSelect: "none",
 }
 
+const infoTextSx: SxProps = {
+  fontFamily: fonts.MAIN || fonts.SECONDARY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
+  color: colors.MAIN,
+  fontSize: "2.5vh",
+  padding: "0 !important",
+  textAlign: "center",
+  userSelect: "none",
+}
+
 const pauseSubTextSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,
   fontWeight: DEFAULT_FONT_WEIGHT,
   fontSize: "3vh",
   color: colors.SECONDARY,
   textAlign: "center",
-  textShadow:
-    "-1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000",
+  textShadow: `-1px 1px 0 ${colors.MAIN}, 1px 1px 0 ${colors.MAIN}, 1px -1px 0 ${colors.MAIN}, -1px -1px 0 ${colors.MAIN}`,
   cursor: "default",
   zIndex: "10000",
   pointerEvents: "none",
@@ -46,18 +61,18 @@ const pauseSubTextSX: SxProps = {
 }
 
 const configContainerSX: SxProps = {
-  height: "50vh",
+  height: "43vh",
   width: "36.6vh",
   borderTopLeftRadius: "15px 100px",
   borderTopRightRadius: "100px 15px",
   borderBottomRightRadius: "15px 100px",
   borderBottomLeftRadius: "100px 15px",
   border: "solid 0.1vh",
-  outline: "#1d1d1d",
+  outline: colors.MAIN,
   outlineStyle: "dashed",
   outlineWidth: "0.5vh",
   color: colors.SECONDARY,
-  marginTop: "48.5vh",
+  marginTop: "55.5vh",
   marginLeft: "1.5vh",
   backgroundImage: `url(${background})`,
 }
@@ -122,10 +137,11 @@ function getConfigureButtonToggleSX(drawerOpen: boolean): SxProps {
 }
 
 export {
+  settingsTitleSX,
   configContainerSX,
   configModalSX,
-  waitingContainerSX,
   propertyTitleSX,
+  infoTextSx,
   getPauseSubTextToggleSX,
   getConfigureButtonToggleSX,
 }
