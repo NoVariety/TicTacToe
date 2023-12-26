@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
   waitingContainerSX,
@@ -30,34 +24,23 @@ type props = {
   waitingTime: gifWaitingTimeMillis
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
-  toggleWaitingTime: () => void
-  tempWaitingTime: gifWaitingTimeMillis
-  tempWaitingTimeRef: MutableRefObject<gifWaitingTimeMillis>
+  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>
 }
 
 export default function SettingsTurnTimer({
   waitingTime,
   setWaitingTime,
   isWaitingTimeEnabled,
-  toggleWaitingTime,
-  tempWaitingTime,
-  tempWaitingTimeRef,
+  setIsWaitingTimeEnabled,
 }: props) {
   const waitingTimes: Array<waitingTimeDisplay> = [
-    { waitingTimeName: "off", waitingTimeValue: gifWaitingTimeMillis.OFF },
     { waitingTimeName: "min", waitingTimeValue: gifWaitingTimeMillis.MIN },
     { waitingTimeName: "mid", waitingTimeValue: gifWaitingTimeMillis.MID },
     { waitingTimeName: "max", waitingTimeValue: gifWaitingTimeMillis.MAX },
   ]
 
   const [waitingTimeArrIndex, setWaitingTimeArrIndex] = useState<number>(
-    waitingTimes.findIndex(
-      (item) =>
-        item.waitingTimeValue ===
-        (tempWaitingTime === gifWaitingTimeMillis.OFF
-          ? tempWaitingTimeRef.current
-          : tempWaitingTime)
-    )
+    waitingTimes.findIndex((item) => item.waitingTimeValue === waitingTime)
   )
 
   const incrementWaitingTime = (): void => {
@@ -65,6 +48,10 @@ export default function SettingsTurnTimer({
   }
   const decrementWaitingTime = (): void => {
     setWaitingTimeArrIndex((prev) => prev - 1)
+  }
+
+  const toggleWaitingTime = (): void => {
+    setIsWaitingTimeEnabled((prev) => !prev)
   }
 
   useEffect(() => {
@@ -95,7 +82,7 @@ export default function SettingsTurnTimer({
             onClick={decrementWaitingTime}
             sx={{
               ...getWaitingButtonsSX(
-                waitingTimeArrIndex <= 1 || !isWaitingTimeEnabled
+                waitingTimeArrIndex <= 0 || !isWaitingTimeEnabled
               ),
             }}
           >

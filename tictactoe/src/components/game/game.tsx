@@ -30,11 +30,16 @@ import {
 } from "../../utils/gameUtils"
 
 type props = {
-  boardLength: number
   waitingTime: gifWaitingTimeMillis
+  isWaitingTimeEnabled: boolean
+  boardLength: number
 }
 
-export default function Game({ boardLength, waitingTime }: props) {
+export default function Game({
+  waitingTime,
+  isWaitingTimeEnabled,
+  boardLength,
+}: props) {
   const [playerSign, setPlayerSign] = useState<cellTypes>(getRandomPlayerSign())
   const [hintsText, setHintsText] = useState<string>(getRandomHint())
   const [gameStateMessage, setGameStateMessage] = useState<gameStateMessages>(
@@ -113,11 +118,7 @@ export default function Game({ boardLength, waitingTime }: props) {
   useEffect(() => {
     if (!isFirstRender) {
       if (legalMoves.length > 0) {
-        if (
-          //! import isWaitingTimeEnabled and change the if to it
-          waitingTime !== gifWaitingTimeMillis.OFF &&
-          legalMoves.length !== 1
-        ) {
+        if (isWaitingTimeEnabled && legalMoves.length !== 1) {
           setPauseScreenOpen(true)
 
           setTimeout(() => {

@@ -14,7 +14,7 @@ import RewindPause from "../rewindPause/rewindPause"
 import GameStatePause from "../gameStatePause/gameStatePause"
 
 import { gameStateMessages, legalMoves } from "../../data.consts"
-import { toggleOffRewind } from "../../utils/gameAlterPanelUtils"
+import { isGameStillOngoing } from "../../utils/gameUtils"
 
 type Props = {
   movesMade: Array<legalMoves>
@@ -37,6 +37,13 @@ export default function GameAlterPanel({
   handleGameStatePauseClose,
   rewindTurn,
 }: Props) {
+  function toggleOffRewind(
+    movesMadeLengh: number,
+    gameStateMessage: gameStateMessages
+  ): boolean {
+    return movesMadeLengh <= 0 || isGameStillOngoing(gameStateMessage)
+  }
+
   return (
     <Container>
       <RewindPause

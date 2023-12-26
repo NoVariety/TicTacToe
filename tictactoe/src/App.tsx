@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 
 import { appTitleSX, bottomTextSX, appGridSX, appSX } from "./AppStyle"
 
@@ -16,47 +16,8 @@ export default function App() {
   const [waitingTime, setWaitingTime] = useState<gifWaitingTimeMillis>(
     gifWaitingTimeMillis.MID
   )
-  const [tempWaitingTime, setTempWaitingTime] =
-    useState<gifWaitingTimeMillis>(waitingTime)
-  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] = useState<boolean>(
-    waitingTime !== gifWaitingTimeMillis.OFF
-  )
-  const tempWaitingTimeRef = useRef<gifWaitingTimeMillis>(tempWaitingTime)
-
-  function saveWaitingTimeToTemp() {
-    if (waitingTime !== gifWaitingTimeMillis.OFF) {
-      tempWaitingTimeRef.current = tempWaitingTime
-    }
-    setTempWaitingTime(waitingTime)
-  }
-
-  //TODO: try removing all the temptimes and OFF with them, seperate waiting time from on/off so they arent needed
-  //todo: so instead of always relying on the time, check if its on or off and only then access time and send the isWaitingTimeEnabled to game
-
-  useEffect(() => {
-    saveWaitingTimeToTemp()
-
-    if (
-      waitingTime === gifWaitingTimeMillis.OFF &&
-      tempWaitingTime === gifWaitingTimeMillis.OFF
-    ) {
-      setWaitingTime(tempWaitingTimeRef.current)
-    }
-  }, [waitingTime])
-
-  const toggleWaitingTime = (): void => {
-    saveWaitingTimeToTemp()
-
-    setIsWaitingTimeEnabled((prev) => !prev)
-  }
-
-  useEffect(() => {
-    if (isWaitingTimeEnabled) {
-      setWaitingTime(tempWaitingTimeRef.current)
-    } else {
-      setWaitingTime(gifWaitingTimeMillis.OFF)
-    }
-  }, [isWaitingTimeEnabled, setWaitingTime])
+  const [isWaitingTimeEnabled, setIsWaitingTimeEnabled] =
+    useState<boolean>(true)
 
   const [boardLength, setBoardLength] = useState<number>(
     boardLengths.DEFAULT_LENGTH
@@ -71,16 +32,18 @@ export default function App() {
         </Typography>
       </Grid>
 
-      <Game boardLength={boardLength} waitingTime={waitingTime} />
+      <Game
+        isWaitingTimeEnabled={isWaitingTimeEnabled}
+        waitingTime={waitingTime}
+        boardLength={boardLength}
+      />
 
       <Settings
         waitingTime={waitingTime}
-        setBoardLength={setBoardLength}
-        isWaitingTimeEnabled={isWaitingTimeEnabled}
         setWaitingTime={setWaitingTime}
-        tempWaitingTime={tempWaitingTime}
-        tempWaitingTimeRef={tempWaitingTimeRef}
-        toggleWaitingTime={toggleWaitingTime}
+        isWaitingTimeEnabled={isWaitingTimeEnabled}
+        setIsWaitingTimeEnabled={setIsWaitingTimeEnabled}
+        setBoardLength={setBoardLength}
         tempBoardLength={tempBoardLength}
         setTempBoardLength={setTempBoardLength}
       />

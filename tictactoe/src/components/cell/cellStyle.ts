@@ -10,7 +10,7 @@ const boardCellSX: SxProps = {
   borderBottomRightRadius: "225px 15px",
   borderBottomLeftRadius: "15px 255px",
   cursor: "crosshair",
-  float: "center",
+
   "&:hover": {
     boxShadow: "2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)",
   },

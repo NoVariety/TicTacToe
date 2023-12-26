@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import {
   configContainerSX,
@@ -19,27 +19,23 @@ import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
 import SettingsBoardLength from "../settingsBoardSize/settingsBoardLength"
 
 type props = {
-  setBoardLength: Dispatch<SetStateAction<number>>
   waitingTime: gifWaitingTimeMillis
   setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
   isWaitingTimeEnabled: boolean
-  toggleWaitingTime: () => void
-  tempWaitingTime: gifWaitingTimeMillis
-  tempWaitingTimeRef: MutableRefObject<gifWaitingTimeMillis>
-  setTempBoardLength: Dispatch<SetStateAction<number>>
+  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>
+  setBoardLength: Dispatch<SetStateAction<number>>
   tempBoardLength: number
+  setTempBoardLength: Dispatch<SetStateAction<number>>
 }
 
 export default function Settings({
-  setBoardLength,
   waitingTime,
   setWaitingTime,
   isWaitingTimeEnabled,
-  toggleWaitingTime,
-  tempWaitingTime,
-  tempWaitingTimeRef,
-  setTempBoardLength,
+  setIsWaitingTimeEnabled,
+  setBoardLength,
   tempBoardLength,
+  setTempBoardLength,
 }: props) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
@@ -72,9 +68,7 @@ export default function Settings({
               waitingTime={waitingTime}
               setWaitingTime={setWaitingTime}
               isWaitingTimeEnabled={isWaitingTimeEnabled}
-              toggleWaitingTime={toggleWaitingTime}
-              tempWaitingTime={tempWaitingTime}
-              tempWaitingTimeRef={tempWaitingTimeRef}
+              setIsWaitingTimeEnabled={setIsWaitingTimeEnabled}
             />
 
             <SettingsBoardLength
