@@ -114,6 +114,7 @@ export default function Game({ boardLength, waitingTime }: props) {
     if (!isFirstRender) {
       if (legalMoves.length > 0) {
         if (
+          //! import isWaitingTimeEnabled and change the if to it
           waitingTime !== gifWaitingTimeMillis.OFF &&
           legalMoves.length !== 1
         ) {
