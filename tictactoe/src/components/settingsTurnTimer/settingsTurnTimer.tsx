@@ -72,19 +72,15 @@ export default function SettingsTurnTimer({
       <Stack direction="row">
         <Container
           onClick={toggleWaitingTime}
-          sx={{
-            ...getToggleContainerSX(!isWaitingTimeEnabled),
-          }}
+          sx={getToggleContainerSX(!isWaitingTimeEnabled)}
           disableGutters
         ></Container>
         <Stack direction="row" spacing={0}>
           <Container
             onClick={decrementWaitingTime}
-            sx={{
-              ...getWaitingButtonsSX(
-                waitingTimeArrIndex <= 0 || !isWaitingTimeEnabled
-              ),
-            }}
+            sx={getWaitingButtonsSX(
+              waitingTimeArrIndex <= 0 || !isWaitingTimeEnabled
+            )}
           >
             -
           </Container>
@@ -95,12 +91,10 @@ export default function SettingsTurnTimer({
 
           <Container
             onClick={incrementWaitingTime}
-            sx={{
-              ...getWaitingButtonsSX(
-                waitingTimeArrIndex === waitingTimes.length - 1 ||
-                  !isWaitingTimeEnabled
-              ),
-            }}
+            sx={getWaitingButtonsSX(
+              waitingTimeArrIndex === waitingTimes.length - 1 ||
+                !isWaitingTimeEnabled
+            )}
           >
             +
           </Container>
