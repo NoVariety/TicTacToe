@@ -1,18 +1,20 @@
-import { SxProps } from "@mui/material"
+import { SxProps } from "@mui/material";
 
-import background from "./images/paperBackground.jpg"
+import background from "./images/paperBackground.jpg";
 
-import { DEFAULT_FONT_WEIGHT, fonts, colors } from "./style.consts"
+import { DEFAULT_FONT_WEIGHT, fonts, colors } from "./style.consts";
 
 const appSX: SxProps = {
   backgroundImage: `url(${background})`,
   backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
   width: "100vw",
   minWidth: "100%",
   height: "100vh",
   spacing: 0,
   justify: "space-around",
-}
+};
 
 const appTitleSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,
@@ -24,7 +26,7 @@ const appTitleSX: SxProps = {
   marginTop: "3vh",
   userSelect: "none",
   color: colors.MAIN,
-}
+};
 
 const bottomTextSX: SxProps = {
   fontFamily: fonts.MAIN || fonts.SECONDARY,
@@ -37,11 +39,11 @@ const bottomTextSX: SxProps = {
   bottom: "0vh",
   color: colors.MAIN,
   userSelect: "none",
-}
+};
 
 const appGridSX: SxProps = {
   height: "20vh",
   justifyContent: "center",
-}
+};
 
-export { appTitleSX, bottomTextSX, appGridSX, appSX }
+export { appTitleSX, bottomTextSX, appGridSX, appSX };

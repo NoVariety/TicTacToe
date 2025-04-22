@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react";
 
 import {
   configContainerSX,
@@ -6,27 +6,27 @@ import {
   getPauseSubTextToggleSX,
   getConfigureButtonToggleSX,
   settingsTitleSX,
-} from "./settingsStyle"
+} from "./settingsStyle";
 
-import Container from "@mui/material/Container"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import Modal from "@mui/material/Modal"
-import Slide from "@mui/material/Slide"
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Slide from "@mui/material/Slide";
 
-import { gifWaitingTimeMillis } from "../../data.consts"
-import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer"
-import SettingsBoardLength from "../settingsBoardSize/settingsBoardLength"
+import { gifWaitingTimeMillis } from "../../data.consts";
+import SettingsTurnTimer from "../settingsTurnTimer/settingsTurnTimer";
+import SettingsBoardLength from "../settingsBoardSize/settingsBoardLength";
 
 type props = {
-  waitingTime: gifWaitingTimeMillis
-  setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>
-  isWaitingTimeEnabled: boolean
-  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>
-  setBoardLength: Dispatch<SetStateAction<number>>
-  tempBoardLength: number
-  setTempBoardLength: Dispatch<SetStateAction<number>>
-}
+  waitingTime: gifWaitingTimeMillis;
+  setWaitingTime: Dispatch<SetStateAction<gifWaitingTimeMillis>>;
+  isWaitingTimeEnabled: boolean;
+  setIsWaitingTimeEnabled: Dispatch<SetStateAction<boolean>>;
+  setBoardLength: Dispatch<SetStateAction<number>>;
+  tempBoardLength: number;
+  setTempBoardLength: Dispatch<SetStateAction<number>>;
+};
 
 export default function Settings({
   waitingTime,
@@ -37,7 +37,7 @@ export default function Settings({
   tempBoardLength,
   setTempBoardLength,
 }: props) {
-  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   return (
     <Container>
@@ -45,7 +45,7 @@ export default function Settings({
         <Container
           sx={{ ...getConfigureButtonToggleSX(isSettingsOpen) }}
           onClick={() => {
-            setIsSettingsOpen((prev) => !prev)
+            setIsSettingsOpen((prev) => !prev);
           }}
         ></Container>
 
@@ -80,5 +80,5 @@ export default function Settings({
         </Slide>
       </Modal>
     </Container>
-  )
+  );
 }
